@@ -16,7 +16,7 @@ public class MapView extends JPanel {
     public MapView(final SwingNode swingNode) {
         try {
             TMXMapReader mapReader = new TMXMapReader();
-            map = mapReader.readMap("/com/attackontitan/gamemap.tmx");
+            map = mapReader.readMap("gamemap.tmx");
         } catch (Exception e) {
             System.out.println("Error while reading the map:\n" + e.getMessage());
             return;
