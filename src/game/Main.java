@@ -2,10 +2,12 @@ package game;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,12 +18,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Pane root = new Pane();
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        
+        Parent root =FXMLLoader.load(getClass().getResource("/game/FXMLDocument.fxml"));
+        Pane pane=new Pane();
         Scene scene=new Scene(root,1000,800);
-        initMap();
-        root.getChildren().add(swingNode);
+        
+        pane.getChildren().add(swingNode);
+        Canvas canvas = new Canvas( pane.getHeight(), pane.getWidth());
+        pane.getChildren().add(canvas);
 
         stage.setTitle("Attack On Titan");
         stage.setMaximized(true);
