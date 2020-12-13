@@ -18,13 +18,13 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root =FXMLLoader.load(getClass().getResource("/com/attackontitan/FXML.fxml"));
+        Parent root =FXMLLoader.load(getClass().getResource("FXML.fxml"));
         Pane pane=new Pane();
         Scene scene=new Scene(root,1000,800);
         pane.getChildren().add(swingNode);
 
         stage.setTitle("Attack On Titan");
-        stage.getIcons().add(new Image("/com/attackontitan/Textures/Homepage/icon.png"));
+        stage.getIcons().add(new Image("/src/main/resources/com/attackontitan/icon.png"));
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
