@@ -21,16 +21,14 @@ public class Main extends Application {
         Parent root =FXMLLoader.load(getClass().getResource("/game/FXMLDocument.fxml"));
         Pane pane=new Pane();
         Scene scene=new Scene(root,1000,800);
-        
         pane.getChildren().add(swingNode);
-        Canvas canvas = new Canvas( pane.getHeight(), pane.getWidth());
-        pane.getChildren().add(canvas);
-
+       
         stage.setTitle("Attack On Titan");
+        stage.getIcons().add(new Image("/resources/Textures/Homepage/icon.png"));
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
-        repaint();
+        //repaint();
     }
 
     public void initMap(){
