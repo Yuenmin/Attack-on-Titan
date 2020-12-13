@@ -24,6 +24,7 @@ public class App extends Application {
         pane.getChildren().add(swingNode);
 
         stage.setTitle("Attack On Titan");
+        stage.getIcons().add(new Image("com/attackontitan/icon.png"));
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
