@@ -53,7 +53,7 @@
                <children>
                   <ImageView fitHeight="65.0" fitWidth="199.0" layoutX="-12.0" layoutY="36.0">
                      <image>
-                        <Image url="@/com/attackontitan/Textures/Homepage/AOTLogo.png" />
+                        <Image url="@Textures/Homepage/AOTLogo.png" />
                      </image>
                      <effect>
                         <SepiaTone level="0.7">
@@ -106,7 +106,7 @@
                   </Label>
                   <ImageView fitHeight="141.0" fitWidth="200.0" layoutX="-16.0" layoutY="48.0">
                      <image>
-                        <Image url="@/com/attackontitan/Textures/Homepage/parallelLines.png" />
+                        <Image url="@Textures/Homepage/parallelLines.png" />
                      </image>
                      <effect>
                         <SepiaTone>
@@ -118,7 +118,7 @@
                   </ImageView>
                   <ImageView fitHeight="37.0" fitWidth="66.0" layoutX="-12.0" layoutY="76.0">
                      <image>
-                        <Image url="@/com/attackontitan/Textures/Homepage/xSymbol.png" />
+                        <Image url="@Textures/Homepage/xSymbol.png" />
                      </image>
                      <effect>
                         <SepiaTone level="0.66">
