@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,18 +19,22 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        Parent root =FXMLLoader.load(getClass().getResource("FXML.fxml"));
-        Pane pane=new Pane();
-        Scene scene=new Scene(root,1000,800);
-        pane.getChildren().add(swingNode);
-
+        
         stage.setTitle("Attack On Titan");
         stage.getIcons().add(new Image("com/attackontitan/icon.png"));
         stage.setMaximized(true);
-        stage.setScene(scene);
+        stage.setScene(gui());
         stage.show();
         //repaint();
+    }
+
+    public Scene gui() throws IOException {
+        Parent root=FXMLLoader.load(getClass().getResource("FXML.fxml"));
+        Pane pane=new Pane();
+        Scene scene = new Scene(root, 1000, 800);
+
+        pane.getChildren().add(swingNode);
+        return scene;
     }
 
     public void initMap(){
