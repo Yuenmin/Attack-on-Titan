@@ -26,7 +26,6 @@ public class Controller implements Initializable {
     @FXML
     private javafx.scene.control.TextField TF1;
 
-
     public void handleButtonAction(ActionEvent event) throws IOException {
 
         Stage window;
@@ -41,7 +40,6 @@ public class Controller implements Initializable {
         window.show();
     }
 
-
     public void handleButtonAction2(ActionEvent event)  {
 
         String name = TF1.getText();
@@ -53,7 +51,7 @@ public class Controller implements Initializable {
         Pane pane=new Pane();
         pane.getChildren().add(swingNode);
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        FadeTransition ft = new FadeTransition(Duration.millis(3000),pane);
+        FadeTransition ft = new FadeTransition(Duration.millis(2500),pane);
         ft.setFromValue(0.0);
         ft.setToValue(1.0);
         ft.play();
@@ -69,7 +67,7 @@ public class Controller implements Initializable {
             public void run() {
                 swingNode.getContent().repaint();
             }
-        }, 160L);
+        }, 190L);
     }
 
     public void initialize(URL url, ResourceBundle rb) {
