@@ -60,7 +60,7 @@ public class Controller implements Initializable {
             AnchorPane pane=new AnchorPane();
             pane.getChildren().add(swingNode);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            FadeTransition ft = new FadeTransition(Duration.millis(2000), pane);
+            FadeTransition ft = new FadeTransition(Duration.millis(2500), pane);
             ft.setFromValue(0.0);
             ft.setToValue(1.0);
             Scene scene = new Scene(pane);
@@ -77,7 +77,7 @@ public class Controller implements Initializable {
             public void run() {
                 swingNode.getContent().repaint();
             }
-        }, 500);
+        }, 900);
     }
 
     public void initialize(URL url, ResourceBundle rb) {
