@@ -77,7 +77,7 @@ public class Controller implements Initializable {
             public void run() {
                 swingNode.getContent().repaint();
             }
-        }, 200);
+        }, 500);
     }
 
     public void initialize(URL url, ResourceBundle rb) {
