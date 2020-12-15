@@ -33,6 +33,10 @@ public class Controller implements Initializable {
         Parent NAMEParent =FXMLLoader.load(this.getClass().getResource("NAME.fxml"));
         Scene NAMEScene = new Scene(NAMEParent,App.getWidth(),App.getHeight());
         window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        FadeTransition ft = new FadeTransition(Duration.millis(2000),NAMEParent);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
         window.setScene(NAMEScene);
         window.show();
     }
