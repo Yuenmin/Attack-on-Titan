@@ -6,7 +6,7 @@ If you guys wish to run the program, pls add these two lines:
 
 --add-modules javafx.controls,javafx.fxml,javafx.swing
 
-to VM option before running the program. There are some problems that I cannot solve for now.
+to VM option before running the program.
 
 Latest update :
 Simple main menu that stores player's name and accessible to the map
