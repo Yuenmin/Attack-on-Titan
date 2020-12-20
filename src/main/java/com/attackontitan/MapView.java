@@ -1,14 +1,12 @@
 package com.attackontitan;
 
 import javafx.embed.swing.SwingNode;
-import javafx.scene.Node;
 import org.mapeditor.core.*;
 import org.mapeditor.io.TMXMapReader;
 import org.mapeditor.view.MapRenderer;
 import org.mapeditor.view.OrthogonalRenderer;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Iterator;
 
 public class MapView extends JPanel {
     Map map;
@@ -25,12 +23,16 @@ public class MapView extends JPanel {
         System.out.println(map.toString() + " loaded");
 
         swingNode.setContent(new MapView(map));
+        swingNode.setScaleX(0.59);
+        swingNode.setScaleY(0.55);
+        swingNode.setTranslateX(-550);
+        swingNode.setTranslateY(-340);
+
     }
 
     public MapView(Map map) {
         this.map = map;
         renderer = new OrthogonalRenderer(map);
-        setVisible(true);
         setPreferredSize(renderer.getMapSize());
     }
 
@@ -50,31 +52,7 @@ public class MapView extends JPanel {
                     g2d.setColor(Color.BLACK);
                     g2d.drawString(Integer.toString(i + 1), x, y+55);
                 }
-            } else if (layer instanceof ObjectGroup) {
-                    paintObjectGroup(g2d,(ObjectGroup) layer);
             }
         }
     }
-
-    public void paintObjectGroup(Graphics2D g, ObjectGroup group) {
-        Iterator var = group.iterator();
-
-        while(var.hasNext()) {
-            MapObject mo = (MapObject)var.next();
-            double ox = mo.getX();
-            double oy = mo.getY();
-            Double objectWidth = mo.getWidth();
-            Double objectHeight = mo.getHeight();
-            Tile tile = mo.getTile();
-
-            Image objectImage = tile.getImage();
-            if(group.getName().equals("cannon")){
-                oy-=235;
-            }else if(group.getName().equals("soldier")){
-                oy-=100;
-            }
-            g.drawImage(objectImage, (int) ox, (int) oy,objectWidth.intValue(),objectHeight.intValue(), null);
-        }
-    }
-
 }
