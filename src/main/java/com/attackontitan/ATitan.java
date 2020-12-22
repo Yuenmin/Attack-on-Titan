@@ -10,14 +10,15 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 //x -50,80,210,330,440,550...
-//when walk y -140,-107.5,-75,-42.5
+//when walk y -140,-107.5,-75,-42.5.....
 //when attack if titan at row 9 y=450
 
 public class ATitan {
-    TranslateTransition translateTransition=new TranslateTransition();
-    public ImageView aTitan =new ImageView();
 
-    public ATitan(double x,double y){
+    private TranslateTransition translateTransition=new TranslateTransition();
+    private ImageView aTitan =new ImageView();
+
+    public ATitan(double x, double y){
         List<Image> aTitanWalk = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             if (i >= 10) {
@@ -101,4 +102,7 @@ public class ATitan {
         timeline.play();
     }
 
+    public ImageView getATitan() {
+        return aTitan;
+    }
 }
