@@ -3,6 +3,7 @@ package com.attackontitan;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,33 +41,28 @@ public class Cannon {
         }
         int y=550;
         if(c==1) {
-            fire(cannon0, cannonImage, 85, y, c);
-            fire(cannon1, cannonImage, 205, y, c);
-            fire(cannon2, cannonImage, 325, y, c);
-            fire(cannon3, cannonImage, 446, y, c);
-            fire(cannon4, cannonImage, 567, y, c);
-            fire(cannon5, cannonImage, 688, y, c);
-            fire(cannon6, cannonImage, 809, y, c);
-            fire(cannon7, cannonImage, 930, y, c);
-            fire(cannon8, cannonImage, 1051, y, c);
-            fire(cannon9, cannonImage, 1172, y, c);
+            print(cannonImage,y,c);
         }else {
-            new Timer().schedule(new TimerTask() {
+            Platform.runLater(new TimerTask() {
                 @Override
                 public void run() {
-                    fire(cannon0, cannonImage, 85, y, c);
-                    fire(cannon1, cannonImage, 205, y, c);
-                    fire(cannon2, cannonImage, 325, y, c);
-                    fire(cannon3, cannonImage, 446, y, c);
-                    fire(cannon4, cannonImage, 567, y, c);
-                    fire(cannon5, cannonImage, 688, y, c);
-                    fire(cannon6, cannonImage, 809, y, c);
-                    fire(cannon7, cannonImage, 930, y, c);
-                    fire(cannon8, cannonImage, 1051, y, c);
-                    fire(cannon9, cannonImage, 1172, y, c);
+                    print(cannonImage, y, c);
                 }
-            }, 300);
+            });
         }
+    }
+
+    private void print(List<Image>cannonImage,int y,int c){
+        fire(cannon0, cannonImage, 85, y, c);
+        fire(cannon1, cannonImage, 205, y, c);
+        fire(cannon2, cannonImage, 325, y, c);
+        fire(cannon3, cannonImage, 446, y, c);
+        fire(cannon4, cannonImage, 567, y, c);
+        fire(cannon5, cannonImage, 688, y, c);
+        fire(cannon6, cannonImage, 809, y, c);
+        fire(cannon7, cannonImage, 930, y, c);
+        fire(cannon8, cannonImage, 1051, y, c);
+        fire(cannon9, cannonImage, 1172, y, c);
     }
 
     private void fire(ImageView cannon, List<Image> cannonImage, int x, int y,int c) {
