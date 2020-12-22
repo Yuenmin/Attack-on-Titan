@@ -14,6 +14,7 @@ import java.util.List;
 public class Soldier {
 
     public Group soldierGroup=new Group();
+    ImageView soldier0 = new ImageView();
     ImageView soldier1 = new ImageView();
     ImageView soldier2 = new ImageView();
     ImageView soldier3 = new ImageView();
@@ -25,7 +26,7 @@ public class Soldier {
     ImageView soldier9 = new ImageView();
 
     public Soldier() {
-        soldierGroup.getChildren().addAll(soldier1, soldier2, soldier3, soldier4, soldier5, soldier6, soldier7, soldier8, soldier9);
+        soldierGroup.getChildren().addAll(soldier0,soldier1, soldier2, soldier3, soldier4, soldier5, soldier6, soldier7, soldier8, soldier9);
         List<Image> soldierImage = new ArrayList<>();
         soldierImage.add(new Image("com/attackontitan/back1.png"));
         soldierImage.add(new Image("com/attackontitan/back2.png"));
@@ -33,16 +34,17 @@ public class Soldier {
         soldierImage.add(new Image("com/attackontitan/right1.png"));
         soldierImage.add(new Image("com/attackontitan/right2.png"));
         soldierImage.add(new Image("com/attackontitan/right3.png"));
-        int y=730;
-        print(soldier1, soldierImage, 10, y);
-        print(soldier2, soldierImage, 180, y);
-        print(soldier3, soldierImage, 350, y);
-        print(soldier4, soldierImage, 520, y);
-        print(soldier5, soldierImage, 690, y);
-        print(soldier6, soldierImage, 860, y);
-        print(soldier7, soldierImage, 1030, y);
-        print(soldier8, soldierImage, 1200, y);
-        print(soldier9, soldierImage, 1370, y);
+        int y=800;
+        print(soldier0, soldierImage, 55, y);
+        print(soldier1, soldierImage, 177, y);
+        print(soldier2, soldierImage, 298, y);
+        print(soldier3, soldierImage, 419, y);
+        print(soldier4, soldierImage, 540, y);
+        print(soldier5, soldierImage, 661, y);
+        print(soldier6, soldierImage, 782, y);
+        print(soldier7, soldierImage, 903, y);
+        print(soldier8, soldierImage, 1024, y);
+        print(soldier9, soldierImage, 1147, y);
     }
 
     private void print(ImageView soldier, List<Image> soldierImage, int x, int y) {
@@ -69,16 +71,21 @@ public class Soldier {
     }
 
     public void soldierWalk(){
+        App app=new App();
         TranslateTransition t1=new TranslateTransition();
         TranslateTransition t2=new TranslateTransition();
         t1.setDelay(Duration.millis(1500));
         t1.setNode(soldierGroup);
-        t1.setToY(-120);
+        t1.setToY(-138);
         t1.setDuration(Duration.millis(3500));
         t1.play();
         t2.setNode(soldierGroup);
-        t2.setToX(85);
+        t2.setToX(60);
         t2.setDuration(Duration.millis(2250));
-        t1.setOnFinished(actionEvent -> t2.play());
+        t1.setOnFinished(actionEvent -> {
+            t2.play();
+            App.drawColumn();
+        });
+
     }
 }
