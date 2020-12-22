@@ -3,6 +3,7 @@ package com.attackontitan;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,6 +11,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 public class Soldier {
 
@@ -28,12 +30,12 @@ public class Soldier {
     public Soldier() {
         soldierGroup.getChildren().addAll(soldier0,soldier1, soldier2, soldier3, soldier4, soldier5, soldier6, soldier7, soldier8, soldier9);
         List<Image> soldierImage = new ArrayList<>();
-        soldierImage.add(new Image("com/attackontitan/back1.png"));
-        soldierImage.add(new Image("com/attackontitan/back2.png"));
-        soldierImage.add(new Image("com/attackontitan/back3.png"));
-        soldierImage.add(new Image("com/attackontitan/right1.png"));
-        soldierImage.add(new Image("com/attackontitan/right2.png"));
-        soldierImage.add(new Image("com/attackontitan/right3.png"));
+        soldierImage.add(new Image("com/attackontitan/sback1.png"));
+        soldierImage.add(new Image("com/attackontitan/sback2.png"));
+        soldierImage.add(new Image("com/attackontitan/sback3.png"));
+        soldierImage.add(new Image("com/attackontitan/sright1.png"));
+        soldierImage.add(new Image("com/attackontitan/sright2.png"));
+        soldierImage.add(new Image("com/attackontitan/sright3.png"));
         int y=800;
         print(soldier0, soldierImage, 55, y);
         print(soldier1, soldierImage, 177, y);
@@ -71,7 +73,6 @@ public class Soldier {
     }
 
     public void soldierWalk(){
-        App app=new App();
         TranslateTransition t1=new TranslateTransition();
         TranslateTransition t2=new TranslateTransition();
         t1.setDelay(Duration.millis(1500));
@@ -82,10 +83,8 @@ public class Soldier {
         t2.setNode(soldierGroup);
         t2.setToX(60);
         t2.setDuration(Duration.millis(2250));
-        t1.setOnFinished(actionEvent -> {
-            t2.play();
-            App.drawColumn();
-        });
-
+        t1.setOnFinished(actionEvent -> t2.play());
+        App app=new App();
+        t2.setOnFinished(actionEvent -> app.spawnATitan(120,190));
     }
 }

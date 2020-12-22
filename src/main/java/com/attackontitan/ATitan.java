@@ -19,7 +19,7 @@ public class ATitan {
     private ImageView aTitan =new ImageView();
 
     public ATitan(double x, double y){
-        List<Image> aTitanWalk = new ArrayList<>();
+        /*List<Image> aTitanWalk = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             if (i >= 10) {
                 aTitanWalk.add(new javafx.scene.image.Image("com/attackontitan/Tuscan_Walk_0001"+(i-10)+".png"));
@@ -34,16 +34,35 @@ public class ATitan {
             } else {
                 aTitanAttack.add(new javafx.scene.image.Image("com/attackontitan/Tuscan_Attack_02_0000" + i + ".png"));
             }
+        }*/
+        List<Image> aTitanWalk = new ArrayList<>();
+        for (int i = 1; i < 9; i++) {
+            aTitanWalk.add(new javafx.scene.image.Image("com/attackontitan/0walk"+i+".png"));
+        }
+        List<Image> aTitanAttack = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            aTitanAttack.add(new javafx.scene.image.Image("com/attackontitan/0attack"+i+".png"));
         }
         print(aTitanWalk,x,y);
     }
 
     private void print(List<Image>aTitanWalk, double x, double y){
         Timeline timeline=new Timeline();
-        timeline.setCycleCount(1);
+        timeline.setCycleCount(3);
         this.aTitan.setX(x);
         this.aTitan.setY(y);
-        aTitan.setScaleY(0.8);
+        this.aTitan.setScaleX(1.5);
+        this.aTitan.setScaleY(1.5);
+        //KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> this.aTitan.setImage(aTitanWalk.get(0)));
+        KeyFrame kf2=new KeyFrame(Duration.millis(300), t -> this.aTitan.setImage(aTitanWalk.get(1)));
+        KeyFrame kf3=new KeyFrame(Duration.millis(600), t -> this.aTitan.setImage(aTitanWalk.get(2)));
+        KeyFrame kf4=new KeyFrame(Duration.millis(900), t -> this.aTitan.setImage(aTitanWalk.get(3)));
+        //KeyFrame kf5=new KeyFrame(Duration.millis(1500), t -> this.aTitan.setImage(aTitanWalk.get(4)));
+        KeyFrame kf6=new KeyFrame(Duration.millis(1200), t -> this.aTitan.setImage(aTitanWalk.get(5)));
+        KeyFrame kf7=new KeyFrame(Duration.millis(1500), t -> this.aTitan.setImage(aTitanWalk.get(6)));
+        KeyFrame kf8=new KeyFrame(Duration.millis(1800), t -> this.aTitan.setImage(aTitanWalk.get(7)));
+        timeline.getKeyFrames().addAll(kf2,kf3,kf4,kf6,kf7,kf8);
+        /*aTitan.setScaleY(0.8);
         aTitan.setScaleX(0.9);
         KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> this.aTitan.setImage(aTitanWalk.get(0)));
         KeyFrame kf2=new KeyFrame(Duration.millis(600), t -> this.aTitan.setImage(aTitanWalk.get(1)));
@@ -60,7 +79,7 @@ public class ATitan {
         KeyFrame kf13=new KeyFrame(Duration.millis(3900), t -> this.aTitan.setImage(aTitanWalk.get(12)));
         KeyFrame kf14=new KeyFrame(Duration.millis(4200), t -> this.aTitan.setImage(aTitanWalk.get(13)));
         KeyFrame kf15=new KeyFrame(Duration.millis(4500), t -> this.aTitan.setImage(aTitanWalk.get(14)));
-        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf9,kf10,kf11,kf12,kf13,kf14,kf15);
+        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf9,kf10,kf11,kf12,kf13,kf14,kf15);*/
         timeline.play();
         walkTransition();
     }
@@ -68,8 +87,8 @@ public class ATitan {
     private void walkTransition(){
         translateTransition.setNode(aTitan);
         translateTransition.setFromY(aTitan.getY());
-        translateTransition.setToY(aTitan.getY()+65);
-        translateTransition.setDuration(Duration.millis(4500));
+        translateTransition.setToY(aTitan.getY()+60);
+        translateTransition.setDuration(Duration.millis(5400));
         translateTransition.play();
     }
 

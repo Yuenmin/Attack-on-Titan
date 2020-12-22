@@ -71,16 +71,17 @@ public class App extends Application {
         ft.setOnFinished(actionEvent -> {
             group.getChildren().addAll(
                     column,
-                    pane,
+                    getPane(),
                     tower,
                     number,
                     new Cannon(0).cannonGroup,
                     new Soldier().soldierGroup
             );
-            drawNum();
             Platform.runLater(new TimerTask() {
                 @Override
                 public void run() {
+                    drawNum();
+                    setFadeTransition(number,1000);
                     drawColumn();
                     setFadeTransition(column,2000);
                 }
@@ -89,34 +90,31 @@ public class App extends Application {
     }
 
     public void drawColumn() {
-        Group column = getColumn();
         for (int i = 590; i > 20; i -= 65) {
             Line line = new Line(0, i, getWidth(), i);
             line.setStroke(Color.GRAY);
             line.setStrokeWidth(1.5);
-            column.getChildren().add(line);
+            getColumn().getChildren().add(line);
         }
     }
 
     public void drawNum(){
-        Group number = getNumber();
         int y=635;
         for(int i=0;i<=9;i++){
             Text num=new Text(30,y,Integer.toString(i));
             num.setFont(Font.font("Calibri", FontWeight.BOLD,52));
-            number.getChildren().add(num);
+            getNumber().getChildren().add(num);
             y-=64;
         }
+
     }
 
     public void spawnATitan(double x, double y){
-        Pane pane=getPane();
-        pane.getChildren().add(new ATitan(x,y).getATitan());
+        getPane().getChildren().add(new ATitan(x,y).getATitan());
     }
 
     public void spawnCTitan(int x){
-        Pane pane=getPane();
-        pane.getChildren().add(new CTitan(x).getCTitan());
+        getPane().getChildren().add(new CTitan(x).getCTitan());
     }
 
     public FadeTransition setFadeTransition(Node node,double duration){

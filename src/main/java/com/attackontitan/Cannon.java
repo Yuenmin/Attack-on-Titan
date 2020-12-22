@@ -84,7 +84,7 @@ public class Cannon {
             timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6, kf7, kf8, kf9, kf10, kf11);
             timeline.play();
         }else{
-            FadeTransition ft = new FadeTransition(Duration.millis(1000), cannonGroup);
+            FadeTransition ft = new FadeTransition(Duration.millis(2000), cannonGroup);
             ft.setFromValue(0.0);
             ft.setToValue(1.0);
             ft.play();
