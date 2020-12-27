@@ -19,6 +19,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 public class App extends Application {
@@ -26,10 +28,11 @@ public class App extends Application {
     private static double height;
     private static double width;
     private static Stage pStage;
+    private static Pane pane =new Pane();
+    private List<ImageView>titanList=new ArrayList<>();
     private Group group=new Group();
     private Group column =new Group();
     private Group number=new Group();
-    private static Pane pane=new Pane();
     private Scene scene;
 
     @Override
@@ -71,11 +74,11 @@ public class App extends Application {
         ft.setOnFinished(actionEvent -> {
             group.getChildren().addAll(
                     column,
-                    getPane(),
+                    pane,
                     tower,
                     number,
-                    new Cannon(0).cannonGroup,
-                    new Soldier().soldierGroup
+                    new Cannon().getCannonGroup(),
+                    new Soldier().getSoldierGroup()
             );
             Platform.runLater(new TimerTask() {
                 @Override
@@ -109,12 +112,16 @@ public class App extends Application {
 
     }
 
-    public void spawnATitan(double x, double y){
-        getPane().getChildren().add(new ATitan(x,y).getATitan());
+    public void spawnATitan(double x, double y,char status){
+        getTitanList().add(new ATitan(x,y,status).getView());
     }
 
     public void spawnCTitan(int x){
-        getPane().getChildren().add(new CTitan(x).getCTitan());
+        getTitanList().add(new CTitan(x).getView());
+    }
+
+    public void update(){
+        pane.getChildren().setAll(getTitanList());
     }
 
     public FadeTransition setFadeTransition(Node node,double duration){
@@ -125,8 +132,8 @@ public class App extends Application {
         return ft;
     }
 
-    public Pane getPane() {
-        return pane;
+    public List<ImageView> getTitanList() {
+        return titanList;
     }
 
     public Group getColumn() {

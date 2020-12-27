@@ -16,20 +16,33 @@ import java.util.TimerTask;
 
 public class Cannon {
 
-    public Group cannonGroup=new Group();
-    Timeline timeline = new Timeline();
-    ImageView cannon0 = new ImageView();
-    ImageView cannon1 = new ImageView();
-    ImageView cannon2 = new ImageView();
-    ImageView cannon3 = new ImageView();
-    ImageView cannon4 = new ImageView();
-    ImageView cannon5 = new ImageView();
-    ImageView cannon6 = new ImageView();
-    ImageView cannon7 = new ImageView();
-    ImageView cannon8 = new ImageView();
-    ImageView cannon9 = new ImageView();
+    private Group cannonGroup=new Group();
+    private Timeline timeline = new Timeline();
+    private ImageView cannon0 = new ImageView();
+    private ImageView cannon1 = new ImageView();
+    private ImageView cannon2 = new ImageView();
+    private ImageView cannon3 = new ImageView();
+    private ImageView cannon4 = new ImageView();
+    private ImageView cannon5 = new ImageView();
+    private ImageView cannon6 = new ImageView();
+    private ImageView cannon7 = new ImageView();
+    private ImageView cannon8 = new ImageView();
+    private ImageView cannon9 = new ImageView();
 
-    public Cannon(int c) {
+    public Cannon() {
+        cannonGroup.getChildren().addAll(cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8,cannon9);
+        List<Image> cannonImage = new ArrayList<>();
+        cannonImage.add(new javafx.scene.image.Image("com/attackontitan/CannonFire_00000.png"));
+        int y=550;
+        Platform.runLater(new TimerTask() {
+            @Override
+            public void run() {
+                print(cannonImage, y, 0);
+            }
+        });
+    }
+
+    public Cannon(int status) {
         cannonGroup.getChildren().addAll(cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8,cannon9);
         List<Image> cannonImage = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
@@ -40,33 +53,24 @@ public class Cannon {
             }
         }
         int y=550;
-        if(c==1) {
-            print(cannonImage,y,c);
-        }else {
-            Platform.runLater(new TimerTask() {
-                @Override
-                public void run() {
-                    print(cannonImage, y, c);
-                }
-            });
-        }
+        print(cannonImage, y, status);
     }
 
-    private void print(List<Image>cannonImage,int y,int c){
-        fire(cannon0, cannonImage, 85, y, c);
-        fire(cannon1, cannonImage, 205, y, c);
-        fire(cannon2, cannonImage, 325, y, c);
-        fire(cannon3, cannonImage, 446, y, c);
-        fire(cannon4, cannonImage, 567, y, c);
-        fire(cannon5, cannonImage, 688, y, c);
-        fire(cannon6, cannonImage, 809, y, c);
-        fire(cannon7, cannonImage, 930, y, c);
-        fire(cannon8, cannonImage, 1051, y, c);
-        fire(cannon9, cannonImage, 1172, y, c);
+    private void print(List<Image>cannonImage,int y,int status){
+        fire(cannon0, cannonImage, 85, y, status);
+        fire(cannon1, cannonImage, 205, y, status);
+        fire(cannon2, cannonImage, 325, y, status);
+        fire(cannon3, cannonImage, 446, y, status);
+        fire(cannon4, cannonImage, 567, y, status);
+        fire(cannon5, cannonImage, 688, y, status);
+        fire(cannon6, cannonImage, 809, y, status);
+        fire(cannon7, cannonImage, 930, y, status);
+        fire(cannon8, cannonImage, 1051, y, status);
+        fire(cannon9, cannonImage, 1172, y, status);
     }
 
-    private void fire(ImageView cannon, List<Image> cannonImage, int x, int y,int c) {
-        if(c==1) {
+    private void fire(ImageView cannon, List<Image> cannonImage, int x, int y,int status) {
+        if(status==1) {
             timeline.setCycleCount(1);
             cannon.setX(x);
             cannon.setY(y);
@@ -92,5 +96,9 @@ public class Cannon {
             cannon.setX(x);
             cannon.setY(y);
         }
+    }
+
+    public Group getCannonGroup() {
+        return cannonGroup;
     }
 }

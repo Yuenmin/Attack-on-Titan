@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +24,8 @@ public class Controller implements Initializable {
     public void handleButtonAction(ActionEvent event) throws IOException {
 
         Parent NAMEParent =FXMLLoader.load(this.getClass().getResource("NAME.fxml"));
+        NAMEParent.setCache(true);
+        NAMEParent.setCacheHint(CacheHint.SPEED);
         Scene NAMEScene = new Scene(NAMEParent,App.getWidth(),App.getHeight());
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         FadeTransition ft = new FadeTransition(Duration.millis(1000),NAMEParent);

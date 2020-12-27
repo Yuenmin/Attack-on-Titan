@@ -15,17 +15,17 @@ import java.util.TimerTask;
 
 public class Soldier {
 
-    public Group soldierGroup=new Group();
-    ImageView soldier0 = new ImageView();
-    ImageView soldier1 = new ImageView();
-    ImageView soldier2 = new ImageView();
-    ImageView soldier3 = new ImageView();
-    ImageView soldier4 = new ImageView();
-    ImageView soldier5 = new ImageView();
-    ImageView soldier6 = new ImageView();
-    ImageView soldier7 = new ImageView();
-    ImageView soldier8 = new ImageView();
-    ImageView soldier9 = new ImageView();
+    private Group soldierGroup=new Group();
+    private ImageView soldier0 = new ImageView();
+    private ImageView soldier1 = new ImageView();
+    private ImageView soldier2 = new ImageView();
+    private ImageView soldier3 = new ImageView();
+    private ImageView soldier4 = new ImageView();
+    private ImageView soldier5 = new ImageView();
+    private ImageView soldier6 = new ImageView();
+    private ImageView soldier7 = new ImageView();
+    private ImageView soldier8 = new ImageView();
+    private ImageView soldier9 = new ImageView();
 
     public Soldier() {
         soldierGroup.getChildren().addAll(soldier0,soldier1, soldier2, soldier3, soldier4, soldier5, soldier6, soldier7, soldier8, soldier9);
@@ -72,7 +72,7 @@ public class Soldier {
         soldierWalk();
     }
 
-    public void soldierWalk(){
+    private void soldierWalk(){
         TranslateTransition t1=new TranslateTransition();
         TranslateTransition t2=new TranslateTransition();
         t1.setDelay(Duration.millis(1500));
@@ -85,6 +85,14 @@ public class Soldier {
         t2.setDuration(Duration.millis(2250));
         t1.setOnFinished(actionEvent -> t2.play());
         App app=new App();
-        t2.setOnFinished(actionEvent -> app.spawnATitan(120,190));
+        t2.setOnFinished(actionEvent -> {
+            app.spawnATitan(200,500,'a');
+            app.spawnCTitan(110);
+            app.update();
+        });
+    }
+
+    public Group getSoldierGroup() {
+        return soldierGroup;
     }
 }
