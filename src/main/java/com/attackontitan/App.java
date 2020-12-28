@@ -119,14 +119,14 @@ public class App extends Application {
 
     }
 
-    public void spawnATitan(double x, double y){
-        aTitanList.add(new ATitan(x,y));
+    public void spawnATitan(double x){
+        aTitanList.add(new ATitan(x));
         aTitanList.get(0).walk();
-        aTitanList.get(0).left();
     }
 
-    public void spawnCTitan(int x){
+    public void spawnCTitan(double x){
         cTitanList.add(new CTitan(x));
+        cTitanList.get(0).right();
     }
 
     public void update(){
@@ -151,9 +151,8 @@ public class App extends Application {
     }
 
     public void finish(){
-        //245+65
-        spawnATitan(300,245);
-        spawnCTitan(110);
+        spawnATitan(95);
+        spawnCTitan(105);
     }
 
     public void startGame(){
@@ -168,10 +167,6 @@ public class App extends Application {
                 }
             }
         }.start();
-    }
-
-    public void shoot(){
-        cannon.shoot();
     }
 
     public FadeTransition setFadeTransition(Node node, double duration){
