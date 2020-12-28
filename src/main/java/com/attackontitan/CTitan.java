@@ -19,7 +19,7 @@ public class CTitan {
 
     public CTitan(double x){
         this.x=x;
-        y=570;
+        y=550;
         attack(x,y);
     }
 
@@ -32,8 +32,6 @@ public class CTitan {
         Timeline timeline=new Timeline();
         cTitan.setX(x);
         cTitan.setY(y);
-        cTitan.setScaleX(1.5);
-        cTitan.setScaleY(1.5);
         KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> cTitan.setImage(cTitanArray.get(0)));
         KeyFrame kf2=new KeyFrame(Duration.millis(600), t -> cTitan.setImage(cTitanArray.get(1)));
         KeyFrame kf3=new KeyFrame(Duration.millis(900), t -> cTitan.setImage(cTitanArray.get(2)));

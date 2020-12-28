@@ -11,7 +11,6 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class Cannon {
@@ -28,23 +27,12 @@ public class Cannon {
     private ImageView cannon7 = new ImageView();
     private ImageView cannon8 = new ImageView();
     private ImageView cannon9 = new ImageView();
+    private List<Image> cannonImage;
+    private int y;
 
     public Cannon() {
         cannonGroup.getChildren().addAll(cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8,cannon9);
-        List<Image> cannonImage = new ArrayList<>();
-        cannonImage.add(new javafx.scene.image.Image("com/attackontitan/CannonFire_00000.png"));
-        int y=550;
-        Platform.runLater(new TimerTask() {
-            @Override
-            public void run() {
-                print(cannonImage, y, 0);
-            }
-        });
-    }
-
-    public Cannon(int status) {
-        cannonGroup.getChildren().addAll(cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8,cannon9);
-        List<Image> cannonImage = new ArrayList<>();
+        cannonImage = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
             if (i == 10) {
                 cannonImage.add(new javafx.scene.image.Image("com/attackontitan/CannonFire_00010.png"));
@@ -52,24 +40,31 @@ public class Cannon {
                 cannonImage.add(new javafx.scene.image.Image("com/attackontitan/CannonFire_0000" + i + ".png"));
             }
         }
-        int y=550;
-        print(cannonImage, y, status);
+        y=550;
     }
 
-    private void print(List<Image>cannonImage,int y,int status){
-        fire(cannon0, cannonImage, 85, y, status);
-        fire(cannon1, cannonImage, 205, y, status);
-        fire(cannon2, cannonImage, 325, y, status);
-        fire(cannon3, cannonImage, 446, y, status);
-        fire(cannon4, cannonImage, 567, y, status);
-        fire(cannon5, cannonImage, 688, y, status);
-        fire(cannon6, cannonImage, 809, y, status);
-        fire(cannon7, cannonImage, 930, y, status);
-        fire(cannon8, cannonImage, 1051, y, status);
-        fire(cannon9, cannonImage, 1172, y, status);
+    public void idle(){
+        show(cannonImage, 0);
     }
 
-    private void fire(ImageView cannon, List<Image> cannonImage, int x, int y,int status) {
+    public void shoot() {
+        show(cannonImage, 1);
+    }
+
+    private void show(List<Image>cannonImage, int status){
+        animation(cannon0, cannonImage, 83, status);
+        animation(cannon1, cannonImage, 204, status);
+        animation(cannon2, cannonImage, 325, status);
+        animation(cannon3, cannonImage, 446, status);
+        animation(cannon4, cannonImage, 567, status);
+        animation(cannon5, cannonImage, 688, status);
+        animation(cannon6, cannonImage, 809, status);
+        animation(cannon7, cannonImage, 930, status);
+        animation(cannon8, cannonImage, 1051, status);
+        animation(cannon9, cannonImage, 1172, status);
+    }
+
+    private void animation(ImageView cannon, List<Image> cannonImage, int x, int status) {
         if(status==1) {
             timeline.setCycleCount(1);
             cannon.setX(x);

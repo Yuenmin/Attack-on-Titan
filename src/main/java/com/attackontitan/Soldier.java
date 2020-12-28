@@ -3,7 +3,6 @@ package com.attackontitan;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,9 +10,8 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
-public class Soldier {
+public class Soldier{
 
     private Group soldierGroup=new Group();
     private ImageView soldier0 = new ImageView();
@@ -26,30 +24,37 @@ public class Soldier {
     private ImageView soldier7 = new ImageView();
     private ImageView soldier8 = new ImageView();
     private ImageView soldier9 = new ImageView();
+    private List<Image> soldierImage;
+    private boolean isAnimating;
+    private int y;
 
     public Soldier() {
         soldierGroup.getChildren().addAll(soldier0,soldier1, soldier2, soldier3, soldier4, soldier5, soldier6, soldier7, soldier8, soldier9);
-        List<Image> soldierImage = new ArrayList<>();
+        soldierImage = new ArrayList<>();
         soldierImage.add(new Image("com/attackontitan/sback1.png"));
         soldierImage.add(new Image("com/attackontitan/sback2.png"));
         soldierImage.add(new Image("com/attackontitan/sback3.png"));
         soldierImage.add(new Image("com/attackontitan/sright1.png"));
         soldierImage.add(new Image("com/attackontitan/sright2.png"));
         soldierImage.add(new Image("com/attackontitan/sright3.png"));
-        int y=800;
-        print(soldier0, soldierImage, 55, y);
-        print(soldier1, soldierImage, 177, y);
-        print(soldier2, soldierImage, 298, y);
-        print(soldier3, soldierImage, 419, y);
-        print(soldier4, soldierImage, 540, y);
-        print(soldier5, soldierImage, 661, y);
-        print(soldier6, soldierImage, 782, y);
-        print(soldier7, soldierImage, 903, y);
-        print(soldier8, soldierImage, 1024, y);
-        print(soldier9, soldierImage, 1147, y);
+        isAnimating =true;
+        y=800;
     }
 
-    private void print(ImageView soldier, List<Image> soldierImage, int x, int y) {
+    public void show(){
+        animation(soldier0, soldierImage, 52);
+        animation(soldier1, soldierImage, 174);
+        animation(soldier2, soldierImage, 295);
+        animation(soldier3, soldierImage, 416);
+        animation(soldier4, soldierImage, 537);
+        animation(soldier5, soldierImage, 658);
+        animation(soldier6, soldierImage, 779);
+        animation(soldier7, soldierImage, 902);
+        animation(soldier8, soldierImage, 1023);
+        animation(soldier9, soldierImage, 1145);
+    }
+
+    private void animation(ImageView soldier, List<Image> soldierImage, int x) {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         soldier.setX(x);
@@ -69,10 +74,10 @@ public class Soldier {
         KeyFrame kf13= new KeyFrame(Duration.millis(7500), t -> soldier.setImage(soldierImage.get(0)));
         timeline.getKeyFrames().addAll(kf1, kf2, kf3,kf4,kf5,kf6,kf7,kf8,kf9,kf10,kf11,kf12,kf13);
         timeline.play();
-        soldierWalk();
+        walkTransition();
     }
 
-    private void soldierWalk(){
+    private void walkTransition(){
         TranslateTransition t1=new TranslateTransition();
         TranslateTransition t2=new TranslateTransition();
         t1.setDelay(Duration.millis(1500));
@@ -81,18 +86,17 @@ public class Soldier {
         t1.setDuration(Duration.millis(3500));
         t1.play();
         t2.setNode(soldierGroup);
-        t2.setToX(60);
+        t2.setToX(62);
         t2.setDuration(Duration.millis(2250));
         t1.setOnFinished(actionEvent -> t2.play());
-        App app=new App();
-        t2.setOnFinished(actionEvent -> {
-            app.spawnATitan(200,500,'a');
-            app.spawnCTitan(110);
-            app.update();
-        });
+        t2.setOnFinished(actionEvent -> isAnimating =false);
     }
 
     public Group getSoldierGroup() {
         return soldierGroup;
+    }
+
+    public boolean isAnimating() {
+        return isAnimating;
     }
 }

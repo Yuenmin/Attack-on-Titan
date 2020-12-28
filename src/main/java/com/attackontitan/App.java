@@ -1,5 +1,6 @@
 package com.attackontitan;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -28,11 +29,14 @@ public class App extends Application {
     private static double height;
     private static double width;
     private static Stage pStage;
-    private static Pane pane =new Pane();
-    private List<ImageView>titanList=new ArrayList<>();
+    private List<ATitan> aTitanList =new ArrayList<>();
+    private List<CTitan>cTitanList=new ArrayList<>();
+    private Soldier soldier=new Soldier();
+    private Cannon cannon=new Cannon();
     private Group group=new Group();
     private Group column =new Group();
     private Group number=new Group();
+    private Pane pane =new Pane();
     private Scene scene;
 
     @Override
@@ -77,16 +81,19 @@ public class App extends Application {
                     pane,
                     tower,
                     number,
-                    new Cannon().getCannonGroup(),
-                    new Soldier().getSoldierGroup()
+                    cannon.getCannonGroup(),
+                    soldier.getSoldierGroup()
             );
             Platform.runLater(new TimerTask() {
                 @Override
                 public void run() {
+                    soldier.show();
+                    cannon.idle();
                     drawNum();
                     setFadeTransition(number,1000);
                     drawColumn();
                     setFadeTransition(column,2000);
+                    startGame();
                 }
             });
         });
@@ -97,7 +104,7 @@ public class App extends Application {
             Line line = new Line(0, i, getWidth(), i);
             line.setStroke(Color.GRAY);
             line.setStrokeWidth(1.5);
-            getColumn().getChildren().add(line);
+            column.getChildren().add(line);
         }
     }
 
@@ -106,42 +113,73 @@ public class App extends Application {
         for(int i=0;i<=9;i++){
             Text num=new Text(30,y,Integer.toString(i));
             num.setFont(Font.font("Calibri", FontWeight.BOLD,52));
-            getNumber().getChildren().add(num);
+            number.getChildren().add(num);
             y-=64;
         }
 
     }
 
-    public void spawnATitan(double x, double y,char status){
-        getTitanList().add(new ATitan(x,y,status).getView());
+    public void spawnATitan(double x, double y){
+        aTitanList.add(new ATitan(x,y));
+        aTitanList.get(0).walk();
+        aTitanList.get(0).left();
     }
 
     public void spawnCTitan(int x){
-        getTitanList().add(new CTitan(x).getView());
+        cTitanList.add(new CTitan(x));
     }
 
     public void update(){
-        pane.getChildren().setAll(getTitanList());
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                pane.getChildren().clear();
+                for (ATitan titan: aTitanList) {
+                    if(!titan.getView().isVisible()){
+                        aTitanList.remove(titan);
+                    }
+                    pane.getChildren().addAll(titan.getView());
+                }
+                for (CTitan titan: cTitanList) {
+                    if(!titan.getView().isVisible()){
+                        cTitanList.remove(titan);
+                    }
+                    pane.getChildren().addAll(titan.getView());
+                }
+            }
+        }.start();
     }
 
-    public FadeTransition setFadeTransition(Node node,double duration){
+    public void finish(){
+        //245+65
+        spawnATitan(300,245);
+        spawnCTitan(110);
+    }
+
+    public void startGame(){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if(!soldier.isAnimating()){
+                    //game loop here
+                    update();
+                    finish();
+                    stop();
+                }
+            }
+        }.start();
+    }
+
+    public void shoot(){
+        cannon.shoot();
+    }
+
+    public FadeTransition setFadeTransition(Node node, double duration){
         FadeTransition ft = new FadeTransition(Duration.millis(duration),node);
         ft.setFromValue(0.0);
         ft.setToValue(1.0);
         ft.play();
         return ft;
-    }
-
-    public List<ImageView> getTitanList() {
-        return titanList;
-    }
-
-    public Group getColumn() {
-        return column;
-    }
-
-    public Group getNumber() {
-        return number;
     }
 
     public static Stage getPrimaryStage() {
