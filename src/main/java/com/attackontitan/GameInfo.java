@@ -1,18 +1,12 @@
 package com.attackontitan;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.Group;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameInfo {
 
@@ -35,6 +29,9 @@ public class GameInfo {
         int hpIncrement = 20;
         for (int i = 0; i <= 9; i++) {
             int healthPoint = App.getWall().get(i).getHp();
+            if(healthPoint<0){
+                healthPoint=0;
+            }
             Text wall = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement, "Wall " + i);
             wall.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
             wall.setFill(Color.WHITE);
@@ -70,6 +67,9 @@ public class GameInfo {
     }
 
     public void drawTitanHp(int healthPoint, double x, double y) {
+        if(healthPoint<0){
+            healthPoint=0;
+        }
         HealthBar healthBar = new HealthBar(x + 7, y, healthPoint / 50.0);
         Text hp = new Text(x + 20, y - 2, Integer.toString(healthPoint));
         hp.setFont(Font.font("Calibri", FontWeight.SEMI_BOLD, 15));

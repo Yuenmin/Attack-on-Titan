@@ -3,7 +3,7 @@ package com.attackontitan;
 public class Weapon {
     private int level;
 
-    private static final int[] ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL = new int[] {0, 2, 5, 10};
+    private static final int[] ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL = new int[] {0, 30, 5, 10};//2
 
     public Weapon() {
         level = 0;
@@ -21,12 +21,12 @@ public class Weapon {
     }
 
     public int getAttack() {
-        return this.ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level];
+        return ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level];
     }
 
     public int getUpgradeCost() {
         if (level < 0 || level >= 3) return 0;
-        return this.ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level + 1];
+        return ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level + 1];
     }
 
     public void destroy() {

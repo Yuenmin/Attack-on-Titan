@@ -176,17 +176,11 @@ public class App extends Application {
                 pane.getChildren().clear();
                 cannon.getLevelGroup().getChildren().clear();
                 gameInfo.getTitanHealthBar().getChildren().clear();
-                //remove dead titan from list
+                //display titan
                 for (ArmouredTitanView titan : ground.getATitanList()) {
-                    if (!titan.getView().isVisible()) {
-                        ground.getATitanList().remove(titan);
-                    }
                     pane.getChildren().addAll(titan.getView());
                 }
                 for (ColossusTitanView titan : ground.getCTitanList()) {
-                    if (!titan.getView().isVisible()) {
-                        ground.getCTitanList().remove(titan);
-                    }
                     pane.getChildren().addAll(titan.getView());
                 }
                 //display level of weapon
@@ -228,18 +222,14 @@ public class App extends Application {
     public void game() {
         Random r = new Random();
         hour.setCurrentHour(3);
+        coin.setCurCoin(270);
         while (hour.getCurrentHour() >= 0) {
             if (hour.isPlayerTurn()) {
                 // player turn
                 requestUpdateInfo();
-
-                try {
-                    do {
-                        Thread.sleep(1000);
-                    } while (UPGRADEStage.isShowing());
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
+                do {
+                    delay(1000);
+                } while (UPGRADEStage.isShowing());
 
                 try {
                     upgradeMultipleWeapons(Controller.CWeaponStr);
@@ -248,11 +238,11 @@ public class App extends Application {
 
                 }
 
-                Timeline timeline=new Timeline();
-                KeyFrame kf1=new KeyFrame(Duration.millis(0),actionEvent -> cannonShoot());
-                KeyFrame kf2=new KeyFrame(Duration.millis(1000),actionEvent -> attackTitan());
-                KeyFrame kf3=new KeyFrame(Duration.millis(2000),actionEvent -> checkAlive());
-                timeline.getKeyFrames().addAll(kf1,kf2,kf3);
+                Timeline timeline = new Timeline();
+                KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> cannonShoot());
+                KeyFrame kf2 = new KeyFrame(Duration.millis(1000), actionEvent -> attackTitan());
+                KeyFrame kf3 = new KeyFrame(Duration.millis(2000), actionEvent -> checkAlive());
+                timeline.getKeyFrames().addAll(kf1, kf2, kf3);
                 timeline.play();
 
             } else if (hour.getCurrentHour() >= 5) {
@@ -313,7 +303,8 @@ public class App extends Application {
     public void cannonShoot() {
         Titan[][] titans = ground.getTitans();
         Platform.runLater(() -> {
-            outer:
+            cannon.show();
+            /*outer:
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (titans[i][j] != null) {
@@ -321,7 +312,7 @@ public class App extends Application {
                         break outer;
                     }
                 }
-            }
+            }*/
         });
     }
 
@@ -333,16 +324,31 @@ public class App extends Application {
                     if (titans[i][j] != null) {
                         if (!titans[i][j].isAlive()) {
                             //set image invisible
+                            int row = i;
+                            int column = j;
+                            FadeTransition ft = new FadeTransition(Duration.millis(2000));
+                            ft.setFromValue(1);
+                            ft.setToValue(0);
                             if (titans[i][j] instanceof ArmouredTitan) {
-                                titans[i][j].armouredTitanView.getView().setVisible(false);
+                                ft.setNode(titans[i][j].armouredTitanView.getView());
+                                ft.setOnFinished(actionEvent -> {
+                                    titans[row][column].armouredTitanView.getView().setVisible(false);
+                                    titans[row][column] = null;
+                                });
                             } else {
-                                titans[i][j].colossusTitanView.getView().setVisible(false);
+                                ft.setNode(titans[i][j].colossusTitanView.getView());
+                                ft.setOnFinished(actionEvent -> {
+                                    titans[row][column].colossusTitanView.getView().setVisible(false);
+                                    titans[row][column] = null;
+                                });
                             }
-                            titans[i][j] = null;
+                            ft.play();
                         }
                     }
                 }
             }
+            ground.getATitanList().removeIf(titan -> !titan.getView().isVisible());
+            ground.getCTitanList().removeIf(titan -> !titan.getView().isVisible());
         });
     }
 
@@ -481,6 +487,7 @@ public class App extends Application {
             curTitan.getColossusTitanView().attack();
             WallUnit wallUnit = wall.get(curColumn);
             Weapon weapon = wallUnit.getWeapon();
+            delay(1500);
             if (weapon.getLevel() > 0 && curTitan instanceof ArmouredTitan) {
                 // attack weapon
                 weapon.destroy();

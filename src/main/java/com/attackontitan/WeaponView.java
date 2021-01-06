@@ -18,7 +18,6 @@ import java.util.List;
 public class WeaponView {
     private Group cannonGroup = new Group();
     private Group levelGroup = new Group();
-    private Timeline timeline = new Timeline();
     private ImageView cannon0 = new ImageView();
     private ImageView cannon1 = new ImageView();
     private ImageView cannon2 = new ImageView();
@@ -30,6 +29,7 @@ public class WeaponView {
     private ImageView cannon8 = new ImageView();
     private ImageView cannon9 = new ImageView();
     private List<Image> cannonImage;
+    private Timeline timeline;
     private int y;
 
     public WeaponView() {
@@ -89,6 +89,7 @@ public class WeaponView {
 
     private void animation(ImageView cannon, List<Image> cannonImage, int x, boolean shoot) {
         if (shoot) {
+            timeline = new Timeline();
             timeline.setCycleCount(1);
             cannon.setLayoutX(x);
             cannon.setLayoutY(y);

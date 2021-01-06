@@ -66,7 +66,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void handleButtonActionU1(ActionEvent event) throws Exception {
+    public void handleButtonActionU1(ActionEvent event) {
         try {
             CWeaponStr = chooseWeapon.getText();
             if (!(CWeaponStr.equalsIgnoreCase("Go") || onlyDigits(CWeaponStr, CWeaponStr.length()))) {
@@ -82,12 +82,12 @@ public class Controller implements Initializable {
             window.setScene(NAMEScene);
             App.getPrimaryStage().requestFocus();
 
-        } catch (NullPointerException ignored) {
+        } catch (Exception ignored) {
 
         }
     }
 
-    public void handleButtonActionU3(ActionEvent event) throws Exception {
+    public void handleButtonActionU3(ActionEvent event) {
         try {
             CWallStr = chooseWall.getText();
             CWallStrLen = CWallStr.length();
@@ -107,12 +107,12 @@ public class Controller implements Initializable {
                 }
             }
             window.close();
-        } catch (NullPointerException ignored) {
+        } catch (Exception ignored) {
 
         }
     }
 
-    public void handleButtonActionU4(ActionEvent event) throws Exception {
+    public void handleButtonActionU4(ActionEvent event) {
         try {
             UpHPStr = fillHP.getText();
             String[] UpHPStrArr = UpHPStr.strip().replaceAll("\\s+", " ").split(" ");
@@ -136,13 +136,12 @@ public class Controller implements Initializable {
 
             //close upgradeBoard
             window.close();
-        } catch (NullPointerException ignored) {
+        } catch (Exception ignored) {
 
         }
     }
 
     public void handleButtonActionYes(ActionEvent event) throws IOException {
-
         cAll = true;
         Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
         Scene NAMEScene = new Scene(NAMEParent);
@@ -188,10 +187,7 @@ public class Controller implements Initializable {
             }
 
         }
-        if (n == 0) {
-            return false;
-        }
-        return true;
+        return n != 0;
     }
 
     public static boolean onlyDigits(String[] str, int n) {
@@ -203,10 +199,7 @@ public class Controller implements Initializable {
 
             }
         }
-        if (n == 0) {
-            return false;
-        }
-        return true;
+        return n != 0;
     }
 
     public static boolean duplicateDigits(String str, int n) {
