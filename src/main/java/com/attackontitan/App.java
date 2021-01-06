@@ -126,6 +126,7 @@ public class App extends Application {
             public void handle(long now) {
                 if (!soldier.isAnimating()) {
                     group.getChildren().add(gameInfo.getGameInfo());
+                    gameInfo.drawInfoPane();
                     UPGRADEStage = new Stage();
                     //UPGRADEStage.initStyle(StageStyle.TRANSPARENT);
                     UPGRADEStage.initOwner(pStage);
@@ -193,9 +194,7 @@ public class App extends Application {
                         Titan[][] titans = ground.getTitans();
                         Titan curTitan = titans[i][j];
                         if (curTitan != null) {
-                            if (curTitan instanceof ColossusTitan) {
-                                gameInfo.drawTitanHp(curTitan.hp, curTitan.colossusTitanView.getView().getLayoutX() + curTitan.colossusTitanView.getView().getTranslateX(), curTitan.colossusTitanView.getView().getLayoutY());
-                            }
+                            gameInfo.drawTitanHp(curTitan,curTitan.hp);
                         }
                     }
                 }
@@ -473,11 +472,11 @@ public class App extends Application {
                         // attack titan
                         int attackPoint = weapon.getAttack();
                         titans[i][j].takeDamage(attackPoint);
+                        gameInfo.titanDamage(titans[i][j],attackPoint);
                     }
                 }
             }
         }
-
     }
 
     public void attackWall(int curRow, int curColumn) {
@@ -495,6 +494,7 @@ public class App extends Application {
             } else {
                 // attack wall
                 wallUnit.takeDamage(titans[9][curColumn].getAttackPoint());
+                gameInfo.wallDamage(curColumn,titans[9][curColumn].getAttackPoint());
             }
         }
 

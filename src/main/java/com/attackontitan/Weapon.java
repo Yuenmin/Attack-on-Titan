@@ -3,7 +3,7 @@ package com.attackontitan;
 public class Weapon {
     private int level;
 
-    private static final int[] ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL = new int[] {0, 30, 5, 10};//2
+    private static final int[] ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL = new int[] {0, 2, 5, 10};
 
     public Weapon() {
         level = 0;

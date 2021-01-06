@@ -26,7 +26,7 @@ public class CoinView {
             coinArray[i]=new Image(getClass().getResourceAsStream("images/coin/Coin" + i + ".png"));
         }
         coinImage.setImage(coinArray[1]);
-        coinImage.setScaleX(1.1);
+        coinImage.setScaleX(1.05);
         coinImage.setLayoutX(1285);
         coinImage.setLayoutY(110);
     }
