@@ -3,6 +3,7 @@ package com.attackontitan;
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -28,21 +30,21 @@ import java.util.TimerTask;
 
 public class App extends Application {
 
+    private Pane pane = new Pane();
     private Group group = new Group();
     private Group column = new Group();
     private Group columnNumber = new Group();
     private Soldier soldier = new Soldier();
     private WeaponView cannon = new WeaponView();
-    private Pane pane = new Pane();
     private Scene scene;
-    private static Stage UPGRADEStage;
     private static Stage pStage;
+    private static Stage UPGRADEStage;
     private static double height;
     private static double width;
     private static final CoinView coinView = new CoinView();
     private static final GameInfo gameInfo = new GameInfo();
-    private static final Wall wall = new Wall();
     private static final Ground ground = new Ground();
+    private static final Wall wall = new Wall();
     private static final Hour hour = new Hour();
     private static final Coin coin = new Coin();
 
@@ -128,20 +130,16 @@ public class App extends Application {
             @Override
             public void handle(long now) {
                 if (!soldier.isAnimating()) {
-                    group.getChildren().add(gameInfo.getGameInfo());
-                    Timeline timeline = new Timeline();
-                    KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> gameInfo.drawWallHp());
-                    KeyFrame kf2 = new KeyFrame(Duration.millis(2000), actionEvent -> gameInfo.drawWallHp());
-                    timeline.getKeyFrames().addAll(kf1, kf2);
-                    timeline.setCycleCount(Timeline.INDEFINITE);
-                    timeline.setAutoReverse(true);
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(900), actionEvent -> gameInfo.drawWallHp()));
+                    timeline.setCycleCount(Animation.INDEFINITE);
                     timeline.play();
                     gameInfo.drawInfoPane();
+                    group.getChildren().add(gameInfo.getGameInfo());
                     UPGRADEStage = new Stage();
                     //UPGRADEStage.initStyle(StageStyle.TRANSPARENT);
                     UPGRADEStage.initOwner(pStage);
                     update();
-                    Platform.runLater(() -> new Thread(App.this::game).start());
+                    new Thread(App.this::game).start();
                     stop();
                 }
             }
@@ -162,19 +160,18 @@ public class App extends Application {
             t.setNode(text);
             t.setByY(-500);
             t.setDuration(Duration.millis(2000));
-            Timeline timeline = new Timeline();
-            KeyFrame kf1 = new KeyFrame(Duration.millis(2000), actionEvent -> t.play());
-            KeyFrame kf2 = new KeyFrame(Duration.millis(6000), actionEvent -> {
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
-                    pStage.setScene(new Scene(root));
-                } catch (IOException e) {
-                    e.printStackTrace();
+            t.play();
+            rectangle.setOnMouseClicked(new EventHandler<>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
+                        pStage.setScene(new Scene(root));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
-            timeline.getKeyFrames().addAll(kf1, kf2);
-            timeline.play();
-
         });
     }
 
@@ -209,7 +206,6 @@ public class App extends Application {
                         }
                     }
                 }
-
                 gameInfo.drawHourNum();
                 gameInfo.drawCoinNum();
             }
@@ -230,10 +226,8 @@ public class App extends Application {
     }
 
     public void game() {
-        int a = 0;
         Random r = new Random();
         hour.setCurrentHour(3);
-        coin.setCurCoin(270);
         while (hour.getCurrentHour() >= 0) {
             if (hour.isPlayerTurn()) {
                 // player turn
@@ -250,7 +244,7 @@ public class App extends Application {
                 }
 
                 Timeline timeline = new Timeline();
-                KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> cannonShoot());
+                KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> cannon.show());
                 KeyFrame kf2 = new KeyFrame(Duration.millis(1000), actionEvent -> attackTitan());
                 KeyFrame kf3 = new KeyFrame(Duration.millis(2000), actionEvent -> checkAlive());
                 timeline.getKeyFrames().addAll(kf1, kf2, kf3);
@@ -268,7 +262,6 @@ public class App extends Application {
                 } else {
                     for (int i = 0; i < chance; i++) {
                         newTitan.add(spawnTitan());
-                        a++;
                     }
                 }
                 titanMoveOrAttack(newTitan);
@@ -283,11 +276,11 @@ public class App extends Application {
                 }
             }
             if (hour.getCurrentHour() >= 0) {
-                //delay(4000);
+                delay(4000);
                 hour.nextHour();
                 coinView.coinAni();
                 coin.increaseCoinPerHours();
-                //delay(1500);
+                delay(1500);
             }
         }
     }
@@ -315,23 +308,6 @@ public class App extends Application {
             ground.addColossusTitan(r.nextInt(max));
         }*/
         return ran;
-    }
-
-    public void cannonShoot() {
-        //TODO
-        Titan[][] titans = ground.getTitans();
-        Platform.runLater(() -> {
-            cannon.show();
-            /*outer:
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 10; j++) {
-                    if (titans[i][j] != null) {
-                        cannon.show();
-                        break outer;
-                    }
-                }
-            }*/
-        });
     }
 
     public void checkAlive() {
@@ -420,7 +396,6 @@ public class App extends Application {
                             upgradeWeapon(wall.get(index).getWeapon());
                             c--;
                         }
-
                     }
                     c = 1;
                 } else

@@ -46,48 +46,42 @@ public class GameInfo {
     }
 
     public void drawWallHp() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                wallHp.getChildren().clear();
-                ImageView heart = new ImageView(new Image(getClass().getResourceAsStream("images/heart.png")));
-                heart.setLayoutX(App.getCoinView().getCoinImage().getLayoutX());
-                heart.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() + 40);
-                int yIncrement = 50;
-                int hpIncrement = 20;
-                for (int i = 0; i <= 9; i++) {
-                    int healthPoint = App.getWall().get(i).getHp();
-                    if (healthPoint < 0) {
-                        healthPoint = 0;
-                    }
-                    Text wall = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement, "Wall " + i);
-                    wall.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
-                    wall.setFill(Color.WHITE);
-                    Text hp = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement + hpIncrement, Integer.toString(healthPoint));
-                    hp.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
-                    boolean blink = wallHpChanged(i, healthPoint);
-                    if (blink) {
-                        Timeline timeline = new Timeline();
-                        KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> hp.setVisible(false));
-                        KeyFrame kf2 = new KeyFrame(Duration.millis(250), actionEvent -> hp.setVisible(true));
-                        timeline.getKeyFrames().addAll(kf1, kf2);
-                        timeline.setCycleCount(5);
-                        timeline.setAutoReverse(true);
-                        timeline.play();
-                    }
-                    if (healthPoint >= 40) {
-                        hp.setFill(Color.LAWNGREEN);
-                    } else if (healthPoint >= 20) {
-                        hp.setFill(Color.YELLOW);
-                    } else {
-                        hp.setFill(Color.RED);
-                    }
-                    wallHp.getChildren().addAll(wall, hp);
-                    yIncrement += 40;
-                }
-                wallHp.getChildren().add(heart);
+        wallHp.getChildren().clear();
+        ImageView heart = new ImageView(new Image(getClass().getResourceAsStream("images/heart.png")));
+        heart.setLayoutX(App.getCoinView().getCoinImage().getLayoutX());
+        heart.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() + 40);
+        int yIncrement = 50;
+        int hpIncrement = 20;
+        for (int i = 0; i <= 9; i++) {
+            int healthPoint = App.getWall().get(i).getHp();
+            if (healthPoint < 0) {
+                healthPoint = 0;
             }
-        });
+            Text wall = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement, "Wall " + i);
+            wall.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
+            wall.setFill(Color.WHITE);
+            Text hp = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement + hpIncrement, Integer.toString(healthPoint));
+            hp.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
+            boolean blink = wallHpChanged(i, healthPoint);
+            if (blink) {
+                Timeline timeline = new Timeline();
+                KeyFrame kf1 = new KeyFrame(Duration.millis(150), actionEvent -> hp.setVisible(false));
+                KeyFrame kf2 = new KeyFrame(Duration.millis(300), actionEvent -> hp.setVisible(true));
+                timeline.getKeyFrames().addAll(kf1, kf2);
+                timeline.setCycleCount(3);
+                timeline.play();
+            }
+            if (healthPoint >= 40) {
+                hp.setFill(Color.LAWNGREEN);
+            } else if (healthPoint >= 20) {
+                hp.setFill(Color.YELLOW);
+            } else {
+                hp.setFill(Color.RED);
+            }
+            wallHp.getChildren().addAll(wall, hp);
+            yIncrement += 40;
+        }
+        wallHp.getChildren().add(heart);
     }
 
     public boolean wallHpChanged(int i, int healthPoint) {
@@ -133,7 +127,11 @@ public class GameInfo {
 
     public void drawHourNum() {
         hourGroup.getChildren().clear();
-        Text hourNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 20, "Hour " + App.getHour().getCurrentHour());
+        int hour = App.getHour().getCurrentHour();
+        if (hour < 0) {
+            hour = 0;
+        }
+        Text hourNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 20, "Hour " + hour);
         hourNum.setFont(Font.font("Calibri", FontWeight.BOLD, 19.5));
         hourNum.setFill(Color.WHITE);
         hourGroup.getChildren().add(hourNum);

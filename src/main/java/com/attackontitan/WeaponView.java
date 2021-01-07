@@ -68,11 +68,22 @@ public class WeaponView {
     }
 
     public void show() {
+        boolean[] gotTitan = new boolean[10];
         Titan[][] titans = App.getGround().getTitans();
+        for (int column = 0; column < 10; column++) {
+            for (int row = 0; row < 10; row++) {
+                if (titans[row][column] != null) {
+                    gotTitan[column] = true;
+                    break;
+                } else {
+                    gotTitan[column] = false;
+                }
+            }
+        }
         int x = 83;
         for (int j = 0; j < 10; j++) {
             boolean shoot = true;
-            if (App.getWall().get(j).getWeapon().getLevel() == 0 || titans[9][j] == null) {
+            if (App.getWall().get(j).getWeapon().getLevel() == 0 || !gotTitan[j]) {
                 shoot = false;
             }
             animation((ImageView) cannonGroup.getChildren().get(j), cannonImage, x, shoot);
