@@ -21,7 +21,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.TimerTask;
 
 public class App extends Application {
 
@@ -126,10 +129,10 @@ public class App extends Application {
             public void handle(long now) {
                 if (!soldier.isAnimating()) {
                     group.getChildren().add(gameInfo.getGameInfo());
-                    Timeline timeline= new Timeline();
-                    KeyFrame kf1=new KeyFrame(Duration.millis(0),actionEvent -> gameInfo.drawWallHp());
-                    KeyFrame kf2=new KeyFrame(Duration.millis(2000),actionEvent -> gameInfo.drawWallHp());
-                    timeline.getKeyFrames().addAll(kf1,kf2);
+                    Timeline timeline = new Timeline();
+                    KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> gameInfo.drawWallHp());
+                    KeyFrame kf2 = new KeyFrame(Duration.millis(2000), actionEvent -> gameInfo.drawWallHp());
+                    timeline.getKeyFrames().addAll(kf1, kf2);
                     timeline.setCycleCount(Timeline.INDEFINITE);
                     timeline.setAutoReverse(true);
                     timeline.play();
@@ -150,7 +153,7 @@ public class App extends Application {
             UPGRADEStage.close();
             group.getChildren().clear();
             Rectangle rectangle = new Rectangle(width, height, Color.BLACK);
-            Text text = new Text(600, 900, "Game Over");
+            Text text = new Text(550, 900, "Game Over");
             text.setFont(Font.font("Calibri", FontWeight.BOLD, 60));
             text.setFill(Color.WHITE);
             group.getChildren().addAll(rectangle, text);
@@ -164,13 +167,14 @@ public class App extends Application {
             KeyFrame kf2 = new KeyFrame(Duration.millis(6000), actionEvent -> {
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
-                    getPrimaryStage().setScene(new Scene(root));
+                    pStage.setScene(new Scene(root));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
             timeline.getKeyFrames().addAll(kf1, kf2);
             timeline.play();
+
         });
     }
 
@@ -201,7 +205,7 @@ public class App extends Application {
                         Titan[][] titans = ground.getTitans();
                         Titan curTitan = titans[i][j];
                         if (curTitan != null) {
-                            gameInfo.drawTitanHp(curTitan,curTitan.hp);
+                            gameInfo.drawTitanHp(curTitan, curTitan.hp);
                         }
                     }
                 }
@@ -226,7 +230,7 @@ public class App extends Application {
     }
 
     public void game() {
-        int a=0;
+        int a = 0;
         Random r = new Random();
         hour.setCurrentHour(3);
         coin.setCurCoin(270);
@@ -256,9 +260,6 @@ public class App extends Application {
                 //Titan's turn
                 double chance = (hour.getCurrentHour() - 5) / 15.0;
                 chance = 1;
-                if(a==5){
-                    chance=0;
-                }
                 ArrayList<Integer> newTitan = new ArrayList<>();
                 if (chance < 1) {
                     if (r.nextInt(101) <= (int) (chance * 100)) {
@@ -276,7 +277,7 @@ public class App extends Application {
             for (WallUnit wallUnit : wall.getWallUnits()) {
                 if (wallUnit.getHp() <= 0) {
                     hour.setCurrentHour(-1);
-                    delay(2000);
+                    delay(3000);
                     endGame();
                     break;
                 }
@@ -300,10 +301,14 @@ public class App extends Application {
     }
 
     public int spawnTitan() {
-        int max = 10;
         Random r = new Random();
-        int ran = r.nextInt(max);
-        ground.addColossusTitan(ran);
+        int size = ground.getCTitanList().size();
+        int ran;
+        do {
+            int max = 10;
+            ran = r.nextInt(max);
+            ground.addColossusTitan(ran);
+        } while (ground.getCTitanList().size() == size);
         /*if(r.nextInt(2) == 0){
             ground.addArmouredTitan(r.nextInt(max));
         }else{
@@ -487,7 +492,7 @@ public class App extends Application {
                         // attack titan
                         int attackPoint = weapon.getAttack();
                         titans[i][j].takeDamage(attackPoint);
-                        gameInfo.titanDamage(titans[i][j],attackPoint);
+                        gameInfo.titanDamage(titans[i][j], attackPoint);
                     }
                 }
             }
@@ -509,7 +514,7 @@ public class App extends Application {
             } else {
                 // attack wall
                 wallUnit.takeDamage(titans[9][curColumn].getAttackPoint());
-                gameInfo.wallDamage(curColumn,titans[9][curColumn].getAttackPoint());
+                gameInfo.wallDamage(curColumn, titans[9][curColumn].getAttackPoint());
             }
         }
     }
