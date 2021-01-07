@@ -126,6 +126,13 @@ public class App extends Application {
             public void handle(long now) {
                 if (!soldier.isAnimating()) {
                     group.getChildren().add(gameInfo.getGameInfo());
+                    Timeline timeline= new Timeline();
+                    KeyFrame kf1=new KeyFrame(Duration.millis(0),actionEvent -> gameInfo.drawWallHp());
+                    KeyFrame kf2=new KeyFrame(Duration.millis(2000),actionEvent -> gameInfo.drawWallHp());
+                    timeline.getKeyFrames().addAll(kf1,kf2);
+                    timeline.setCycleCount(Timeline.INDEFINITE);
+                    timeline.setAutoReverse(true);
+                    timeline.play();
                     gameInfo.drawInfoPane();
                     UPGRADEStage = new Stage();
                     //UPGRADEStage.initStyle(StageStyle.TRANSPARENT);
@@ -143,7 +150,7 @@ public class App extends Application {
             UPGRADEStage.close();
             group.getChildren().clear();
             Rectangle rectangle = new Rectangle(width, height, Color.BLACK);
-            Text text = new Text(500, 900, "Game Over");
+            Text text = new Text(600, 900, "Game Over");
             text.setFont(Font.font("Calibri", FontWeight.BOLD, 60));
             text.setFill(Color.WHITE);
             group.getChildren().addAll(rectangle, text);
@@ -174,10 +181,10 @@ public class App extends Application {
                 if (hour.getCurrentHour() < 0) {
                     stop();
                 }
-                pane.getChildren().clear();
                 cannon.getLevelGroup().getChildren().clear();
                 gameInfo.getTitanHealthBar().getChildren().clear();
                 //display titan
+                pane.getChildren().clear();
                 for (ArmouredTitanView titan : ground.getATitanList()) {
                     pane.getChildren().addAll(titan.getView());
                 }
@@ -198,7 +205,7 @@ public class App extends Application {
                         }
                     }
                 }
-                gameInfo.drawWallHp();
+
                 gameInfo.drawHourNum();
                 gameInfo.drawCoinNum();
             }
@@ -219,6 +226,7 @@ public class App extends Application {
     }
 
     public void game() {
+        int a=0;
         Random r = new Random();
         hour.setCurrentHour(3);
         coin.setCurCoin(270);
@@ -248,6 +256,9 @@ public class App extends Application {
                 //Titan's turn
                 double chance = (hour.getCurrentHour() - 5) / 15.0;
                 chance = 1;
+                if(a==5){
+                    chance=0;
+                }
                 ArrayList<Integer> newTitan = new ArrayList<>();
                 if (chance < 1) {
                     if (r.nextInt(101) <= (int) (chance * 100)) {
@@ -256,6 +267,7 @@ public class App extends Application {
                 } else {
                     for (int i = 0; i < chance; i++) {
                         newTitan.add(spawnTitan());
+                        a++;
                     }
                 }
                 titanMoveOrAttack(newTitan);
@@ -264,16 +276,17 @@ public class App extends Application {
             for (WallUnit wallUnit : wall.getWallUnits()) {
                 if (wallUnit.getHp() <= 0) {
                     hour.setCurrentHour(-1);
+                    delay(2000);
                     endGame();
                     break;
                 }
             }
             if (hour.getCurrentHour() >= 0) {
-                delay(4000);
+                //delay(4000);
                 hour.nextHour();
                 coinView.coinAni();
                 coin.increaseCoinPerHours();
-                delay(1500);
+                //delay(1500);
             }
         }
     }
@@ -300,6 +313,7 @@ public class App extends Application {
     }
 
     public void cannonShoot() {
+        //TODO
         Titan[][] titans = ground.getTitans();
         Platform.runLater(() -> {
             cannon.show();
@@ -322,6 +336,7 @@ public class App extends Application {
                 for (int j = 0; j < 10; j++) {
                     if (titans[i][j] != null) {
                         if (!titans[i][j].isAlive()) {
+                            System.out.println("Not alive");
                             //set image invisible
                             int row = i;
                             int column = j;
@@ -497,7 +512,6 @@ public class App extends Application {
                 gameInfo.wallDamage(curColumn,titans[9][curColumn].getAttackPoint());
             }
         }
-
     }
 
     public FadeTransition setFadeTransition(Node node, double duration) {

@@ -1,6 +1,6 @@
 package com.attackontitan;
 
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +9,11 @@ import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -48,7 +50,6 @@ public class Controller implements Initializable {
         ft.setToValue(1.0);
         ft.play();
         window.setScene(NAMEScene);
-
     }
 
     public void handleButtonAction2(ActionEvent event) throws IOException {

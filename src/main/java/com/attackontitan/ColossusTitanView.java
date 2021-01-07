@@ -15,7 +15,6 @@ public class ColossusTitanView {
 
     private TranslateTransition translateTransition;
     private ImageView cTitan;
-    private HealthBar healthBar;
     private List<Image> cTitanLeft;
     private List<Image> cTitanRight;
     private List<Image> cTitanAttack;

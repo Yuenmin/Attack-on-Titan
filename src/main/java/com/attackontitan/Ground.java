@@ -46,18 +46,18 @@ public class Ground {
         }
     }
 
-    private boolean moveRight=false;
+    private boolean moveRight;
     public void move(int curRow, int curColumn) {
         Random ran = new Random();
         int r=ran.nextInt(3);
         Titan curTitan = titans[curRow][curColumn];
         if (curTitan instanceof ColossusTitan) {
-
+            moveRight=false;
             if (isMoveLeftAndRightAvailable(curRow, curColumn)) {
                 if (r == 1) {
                     // moveRight
                     moveRight=true;
-                    System.out.println("move right1");
+                    //System.out.println("move right1");
                     curTitan.getColossusTitanView().right();
                     if (this.titans[curRow][curColumn + 1] == null) {
                         this.titans[curRow][curColumn + 1] = curTitan;
@@ -68,7 +68,7 @@ public class Ground {
 
                 } else if(r == 0){
                     // move left
-                    System.out.println("move left1");
+                    //System.out.println("move left1");
                     curTitan.getColossusTitanView().left();
                     if (this.titans[curRow][curColumn - 1] == null) {
                         this.titans[curRow][curColumn - 1] = curTitan;
@@ -79,12 +79,12 @@ public class Ground {
 
                 }else {
                     //not move
-                    System.out.println("not move1");
+                    //System.out.println("not move1");
                 }
             } else if (isMoveLeftAvailable(curRow, curColumn)){
                 if (ran.nextInt(2) == 1) {
                     // move left
-                    System.out.println("move left2");
+                    //System.out.println("move left2");
                     curTitan.getColossusTitanView().left();
                     if (this.titans[curRow][curColumn - 1] == null) {
                         this.titans[curRow][curColumn - 1] = curTitan;
@@ -95,13 +95,13 @@ public class Ground {
 
                 } else {
                     //  not move
-                    System.out.println("not move2");
+                    //System.out.println("not move2");
                 }
             } else if (isMoveRightAvailable(curRow, curColumn)) {
                 if (ran.nextInt(2) == 1) {
                     // move right
                     moveRight=true;
-                    System.out.println("move right2");
+                    //System.out.println("move right2");
                     curTitan.getColossusTitanView().right();
                     if (this.titans[curRow][curColumn + 1] == null) {
                         this.titans[curRow][curColumn + 1] = curTitan;
@@ -112,11 +112,11 @@ public class Ground {
 
                 } else {
                     //  not move
-                    System.out.println("not move3");
+                    //System.out.println("not move3");
                 }
             } else {
                 // not move
-                System.out.println("not move4");
+                //System.out.println("not move4");
             }
         } else if (curTitan instanceof ArmouredTitan) {
 

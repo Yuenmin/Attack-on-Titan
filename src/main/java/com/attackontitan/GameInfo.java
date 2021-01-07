@@ -1,6 +1,8 @@
 package com.attackontitan;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -24,9 +26,11 @@ public class GameInfo {
     private Group titanHealthBar = new Group();
     private Group damageGroup = new Group();
     private Rectangle rectangle = new Rectangle();
+    private int[] curHp;
 
     public GameInfo() {
         gameInfo.getChildren().addAll(rectangle, wallHp, coinGroup, hourGroup, titanHealthBar, damageGroup);
+        curHp = new int[]{50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
     }
 
     public void drawInfoPane() {
@@ -42,53 +46,79 @@ public class GameInfo {
     }
 
     public void drawWallHp() {
-        wallHp.getChildren().clear();
-        ImageView heart = new ImageView(new Image(getClass().getResourceAsStream("images/heart.png")));
-        heart.setLayoutX(App.getCoinView().getCoinImage().getLayoutX());
-        heart.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() + 40);
-        int yIncrement = 50;
-        int hpIncrement = 20;
-        for (int i = 0; i <= 9; i++) {
-            int healthPoint = App.getWall().get(i).getHp();
-            if (healthPoint < 0) {
-                healthPoint = 0;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                wallHp.getChildren().clear();
+                ImageView heart = new ImageView(new Image(getClass().getResourceAsStream("images/heart.png")));
+                heart.setLayoutX(App.getCoinView().getCoinImage().getLayoutX());
+                heart.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() + 40);
+                int yIncrement = 50;
+                int hpIncrement = 20;
+                for (int i = 0; i <= 9; i++) {
+                    int healthPoint = App.getWall().get(i).getHp();
+                    if (healthPoint < 0) {
+                        healthPoint = 0;
+                    }
+                    Text wall = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement, "Wall " + i);
+                    wall.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
+                    wall.setFill(Color.WHITE);
+                    Text hp = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement + hpIncrement, Integer.toString(healthPoint));
+                    hp.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
+                    boolean blink = wallHpChanged(i, healthPoint);
+                    if (blink) {
+                        Timeline timeline = new Timeline();
+                        KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> hp.setVisible(false));
+                        KeyFrame kf2 = new KeyFrame(Duration.millis(250), actionEvent -> hp.setVisible(true));
+                        timeline.getKeyFrames().addAll(kf1, kf2);
+                        timeline.setCycleCount(5);
+                        timeline.setAutoReverse(true);
+                        timeline.play();
+                    }
+                    if (healthPoint >= 40) {
+                        hp.setFill(Color.LAWNGREEN);
+                    } else if (healthPoint >= 20) {
+                        hp.setFill(Color.YELLOW);
+                    } else {
+                        hp.setFill(Color.RED);
+                    }
+                    wallHp.getChildren().addAll(wall, hp);
+                    yIncrement += 40;
+                }
+                wallHp.getChildren().add(heart);
             }
-            Text wall = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement, "Wall " + i);
-            wall.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
-            wall.setFill(Color.WHITE);
-            Text hp = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement + hpIncrement, Integer.toString(healthPoint));
-            hp.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
-            if (healthPoint >= 40) {
-                hp.setFill(Color.LAWNGREEN);
-            } else if (healthPoint >= 20) {
-                hp.setFill(Color.YELLOW);
-            } else {
-                hp.setFill(Color.RED);
-            }
-            wallHp.getChildren().addAll(wall, hp);
-            yIncrement += 40;
+        });
+    }
+
+    public boolean wallHpChanged(int i, int healthPoint) {
+        if (curHp[i] > healthPoint) {
+            curHp[i] = healthPoint;
+            return true;
+        } else if (curHp[i] < healthPoint) {
+            curHp[i] = healthPoint;
+            return false;
+        } else {
+            return false;
         }
-        wallHp.getChildren().add(heart);
     }
 
     public void wallDamage(int wallIndex, int damage) {
         Platform.runLater(() -> {
-            int yIncrement = 50;
-            int hpIncrement = 20;
+            int xIncrement = 0;
             for (int i = 0; i <= 9; i++) {
                 if (i == wallIndex) {
-                    Text text = new Text(1300, 150 + yIncrement + hpIncrement, "-" + damage);
+                    Text text = new Text(75 + xIncrement, 700, "-" + damage);
                     text.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
                     text.setFill(Color.RED);
                     damageGroup.getChildren().add(text);
-                    TranslateTransition t = setTransition(text, 20, 0);
+                    TranslateTransition t = setTransition(text, 0, -20);
                     t.setOnFinished(actionEvent -> {
                         text.setText("");
                         text.setTranslateX(0);
                     });
-                    setFadeTransition(text);
+                    setFadeTransition(text, 1500);
                 }
-                yIncrement += 40;
+                xIncrement += 120;
             }
         });
     }
@@ -113,11 +143,11 @@ public class GameInfo {
         double x;
         double y;
         if (titan instanceof ArmouredTitan) {
-            x = titan.getArmouredTitanView().getView().getLayoutX()+titan.getArmouredTitanView().getView().getTranslateX();
-            y = titan.getArmouredTitanView().getView().getLayoutY()+titan.getArmouredTitanView().getView().getTranslateY();
+            x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX();
+            y = titan.getArmouredTitanView().getView().getLayoutY() + titan.getArmouredTitanView().getView().getTranslateY();
         } else {
-            x = titan.getColossusTitanView().getView().getLayoutX()+titan.getColossusTitanView().getView().getTranslateX();
-            y = titan.getColossusTitanView().getView().getLayoutY()+titan.getColossusTitanView().getView().getTranslateY();
+            x = titan.getColossusTitanView().getView().getLayoutX() + titan.getColossusTitanView().getView().getTranslateX();
+            y = titan.getColossusTitanView().getView().getLayoutY() + titan.getColossusTitanView().getView().getTranslateY();
         }
         if (healthPoint < 0) {
             healthPoint = 0;
@@ -143,7 +173,7 @@ public class GameInfo {
             }
             Text text = new Text();
             text.setText("-" + damage);
-            text.setLayoutX(x+10);
+            text.setLayoutX(x + 10);
             text.setLayoutY(y);
             text.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
             text.setFill(Color.RED);
@@ -152,9 +182,16 @@ public class GameInfo {
                 text.setText("");
                 text.setTranslateY(0);
             });
-            setFadeTransition(text);
+            setFadeTransition(text, 1500);
             damageGroup.getChildren().add(text);
         });
+    }
+
+    public void setFadeTransition(Node node, int duration) {
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.play();
     }
 
     public TranslateTransition setTransition(Node node, int byX, int byY) {
@@ -167,13 +204,6 @@ public class GameInfo {
         return t;
     }
 
-    public void setFadeTransition(Node node) {
-        FadeTransition ft = new FadeTransition(Duration.millis(1500), node);
-        ft.setFromValue(1.0);
-        ft.setToValue(0);
-        ft.play();
-    }
-
     public Group getGameInfo() {
         return gameInfo;
     }
@@ -181,6 +211,5 @@ public class GameInfo {
     public Group getTitanHealthBar() {
         return titanHealthBar;
     }
-
 
 }
