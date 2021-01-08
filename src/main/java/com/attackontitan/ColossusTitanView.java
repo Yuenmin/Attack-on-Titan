@@ -133,7 +133,7 @@ public class ColossusTitanView {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!isAnimating()) {
+                if (!isAnimating) {
                     leftAni();
                     isAnimating = true;
                     stop();
@@ -146,7 +146,7 @@ public class ColossusTitanView {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!isAnimating()) {
+                if (!isAnimating) {
                     rightAni();
                     isAnimating = true;
                     stop();
@@ -159,7 +159,7 @@ public class ColossusTitanView {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!isAnimating()) {
+                if (!isAnimating) {
                     attackAni();
                     isAnimating = true;
                     stop();
@@ -172,7 +172,4 @@ public class ColossusTitanView {
         return cTitan;
     }
 
-    public boolean isAnimating() {
-        return isAnimating;
-    }
 }

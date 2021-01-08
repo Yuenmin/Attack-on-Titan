@@ -23,15 +23,15 @@ public class ArmouredTitanView {
     private double y;
     private boolean isAnimating;
 
-    public ArmouredTitanView(double column){
+    public ArmouredTitanView(double column) {
         initImage();
-        x=95+(column*120);
-        y=-65;
-        aTitan =new ImageView();
+        x = 95 + (column * 120);
+        y = -65;
+        aTitan = new ImageView();
         idle();
     }
 
-    public void idle(){
+    public void idle() {
         aTitan.setLayoutX(x);
         aTitan.setLayoutY(y);
         aTitan.setImage(aTitanWalk.get(0));
@@ -41,142 +41,142 @@ public class ArmouredTitanView {
         ft.play();
     }
 
-    private void initImage(){
+    private void initImage() {
         aTitanWalk = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            aTitanWalk.add(new Image(getClass().getResourceAsStream("images/titan/0walk"+i+".png")));
+            aTitanWalk.add(new Image(getClass().getResourceAsStream("images/titan/0walk" + i + ".png")));
         }
         aTitanLeft = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            aTitanLeft.add(new Image(getClass().getResourceAsStream("images/titan/0left"+i+".png")));
+            aTitanLeft.add(new Image(getClass().getResourceAsStream("images/titan/0left" + i + ".png")));
         }
         aTitanRight = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            aTitanRight.add(new Image(getClass().getResourceAsStream("images/titan/0right"+i+".png")));
+            aTitanRight.add(new Image(getClass().getResourceAsStream("images/titan/0right" + i + ".png")));
         }
         aTitanAttack = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
-            aTitanAttack.add(new Image(getClass().getResourceAsStream("images/titan/0attack"+i+".png")));
+            aTitanAttack.add(new Image(getClass().getResourceAsStream("images/titan/0attack" + i + ".png")));
         }
     }
 
-    private void walkAni(char mode){
-        translateTransition=new TranslateTransition();
-        Timeline timeline=new Timeline();
+    private void walkAni(char mode) {
+        translateTransition = new TranslateTransition();
+        Timeline timeline = new Timeline();
         timeline.setCycleCount(2);
         aTitan.setLayoutX(x);
         aTitan.setLayoutY(y);
-        KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanWalk.get(1)));
-        KeyFrame kf2=new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanWalk.get(2)));
-        KeyFrame kf3=new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanWalk.get(3)));
-        KeyFrame kf4=new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanWalk.get(5)));
-        KeyFrame kf5=new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanWalk.get(6)));
-        KeyFrame kf6=new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanWalk.get(7)));
-        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6);
+        KeyFrame kf1 = new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanWalk.get(1)));
+        KeyFrame kf2 = new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanWalk.get(2)));
+        KeyFrame kf3 = new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanWalk.get(3)));
+        KeyFrame kf4 = new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanWalk.get(5)));
+        KeyFrame kf5 = new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanWalk.get(6)));
+        KeyFrame kf6 = new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanWalk.get(7)));
+        timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6);
         timeline.play();
-        if(mode=='s') {
+        if (mode == 's') {
             translateTransition.setFromY(15);
             translateTransition.setByY(50);
-        }else{
+        } else {
             translateTransition.setByY(65);
         }
         translateTransition.setNode(aTitan);
         translateTransition.setDuration(Duration.millis(3600));
         translateTransition.play();
         translateTransition.setOnFinished(actionEvent -> {
-            isAnimating=false;
+            isAnimating = false;
             update();
         });
     }
 
-    private void leftAni(){
-        translateTransition=new TranslateTransition();
-        Timeline timeline=new Timeline();
+    private void leftAni() {
+        translateTransition = new TranslateTransition();
+        Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         aTitan.setLayoutX(x);
         aTitan.setLayoutY(y);
-        KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanLeft.get(0)));
-        KeyFrame kf2=new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanLeft.get(1)));
-        KeyFrame kf3=new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanLeft.get(2)));
-        KeyFrame kf4=new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanLeft.get(3)));
-        KeyFrame kf5=new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanLeft.get(4)));
-        KeyFrame kf6=new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanLeft.get(5)));
-        KeyFrame kf7=new KeyFrame(Duration.millis(2100), t -> aTitan.setImage(aTitanLeft.get(6)));
-        KeyFrame kf8=new KeyFrame(Duration.millis(2400), t -> aTitan.setImage(aTitanLeft.get(7)));
-        KeyFrame kf9=new KeyFrame(Duration.millis(2700), t -> aTitan.setImage(aTitanWalk.get(0)));
-        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf9);
+        KeyFrame kf1 = new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanLeft.get(0)));
+        KeyFrame kf2 = new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanLeft.get(1)));
+        KeyFrame kf3 = new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanLeft.get(2)));
+        KeyFrame kf4 = new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanLeft.get(3)));
+        KeyFrame kf5 = new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanLeft.get(4)));
+        KeyFrame kf6 = new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanLeft.get(5)));
+        KeyFrame kf7 = new KeyFrame(Duration.millis(2100), t -> aTitan.setImage(aTitanLeft.get(6)));
+        KeyFrame kf8 = new KeyFrame(Duration.millis(2400), t -> aTitan.setImage(aTitanLeft.get(7)));
+        KeyFrame kf9 = new KeyFrame(Duration.millis(2700), t -> aTitan.setImage(aTitanWalk.get(0)));
+        timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6, kf7, kf8, kf9);
         timeline.play();
         translateTransition.setNode(aTitan);
         translateTransition.setByX(-120);
         translateTransition.setDuration(Duration.millis(2700));
         translateTransition.play();
-        translateTransition.setOnFinished(actionEvent -> walk('s'));
+        translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
     }
 
-    private void rightAni(){
-        translateTransition=new TranslateTransition();
-        Timeline timeline=new Timeline();
+    private void rightAni() {
+        translateTransition = new TranslateTransition();
+        Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
         aTitan.setLayoutX(x);
         aTitan.setLayoutY(y);
-        KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanRight.get(0)));
-        KeyFrame kf2=new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanRight.get(1)));
-        KeyFrame kf3=new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanRight.get(2)));
-        KeyFrame kf4=new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanRight.get(3)));
-        KeyFrame kf5=new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanRight.get(4)));
-        KeyFrame kf6=new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanRight.get(5)));
-        KeyFrame kf7=new KeyFrame(Duration.millis(2100), t -> aTitan.setImage(aTitanRight.get(6)));
-        KeyFrame kf8=new KeyFrame(Duration.millis(2400), t -> aTitan.setImage(aTitanRight.get(7)));
-        KeyFrame kf9=new KeyFrame(Duration.millis(2700), t -> aTitan.setImage(aTitanWalk.get(0)));
-        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf9);
+        KeyFrame kf1 = new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanRight.get(0)));
+        KeyFrame kf2 = new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanRight.get(1)));
+        KeyFrame kf3 = new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanRight.get(2)));
+        KeyFrame kf4 = new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanRight.get(3)));
+        KeyFrame kf5 = new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanRight.get(4)));
+        KeyFrame kf6 = new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanRight.get(5)));
+        KeyFrame kf7 = new KeyFrame(Duration.millis(2100), t -> aTitan.setImage(aTitanRight.get(6)));
+        KeyFrame kf8 = new KeyFrame(Duration.millis(2400), t -> aTitan.setImage(aTitanRight.get(7)));
+        KeyFrame kf9 = new KeyFrame(Duration.millis(2700), t -> aTitan.setImage(aTitanWalk.get(0)));
+        timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6, kf7, kf8, kf9);
         timeline.play();
         translateTransition.setNode(aTitan);
         translateTransition.setByX(120);
         translateTransition.setDuration(Duration.millis(2700));
         translateTransition.play();
-        translateTransition.setOnFinished(actionEvent -> walk('s'));
+        translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
     }
 
-    private void attackAni(){
-        Timeline timeline=new Timeline();
+    private void attackAni() {
+        Timeline timeline = new Timeline();
         timeline.setCycleCount(2);
         aTitan.setLayoutX(x);
         aTitan.setLayoutY(y);
-        KeyFrame kf1=new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanAttack.get(0)));
-        KeyFrame kf2=new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanAttack.get(1)));
-        KeyFrame kf3=new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanAttack.get(2)));
-        KeyFrame kf4=new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanAttack.get(3)));
-        KeyFrame kf5=new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanAttack.get(2)));
-        KeyFrame kf6=new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanAttack.get(1)));
-        KeyFrame kf7=new KeyFrame(Duration.millis(2100), t -> aTitan.setImage(aTitanAttack.get(0)));
-        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7);
+        KeyFrame kf1 = new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanAttack.get(0)));
+        KeyFrame kf2 = new KeyFrame(Duration.millis(600), t -> aTitan.setImage(aTitanAttack.get(1)));
+        KeyFrame kf3 = new KeyFrame(Duration.millis(900), t -> aTitan.setImage(aTitanAttack.get(2)));
+        KeyFrame kf4 = new KeyFrame(Duration.millis(1200), t -> aTitan.setImage(aTitanAttack.get(3)));
+        KeyFrame kf5 = new KeyFrame(Duration.millis(1500), t -> aTitan.setImage(aTitanAttack.get(2)));
+        KeyFrame kf6 = new KeyFrame(Duration.millis(1800), t -> aTitan.setImage(aTitanAttack.get(1)));
+        KeyFrame kf7 = new KeyFrame(Duration.millis(2100), t -> aTitan.setImage(aTitanAttack.get(0)));
+        timeline.getKeyFrames().addAll(kf1, kf2, kf3, kf4, kf5, kf6, kf7);
         timeline.play();
-        timeline.setOnFinished(actionEvent -> isAnimating=false);
+        timeline.setOnFinished(actionEvent -> isAnimating = false);
     }
 
-    private void update(){
-        aTitan.setLayoutX(aTitan.getLayoutX()+aTitan.getTranslateX());
-        aTitan.setLayoutY(aTitan.getLayoutY()+aTitan.getTranslateY());
+    private void update() {
+        aTitan.setLayoutX(aTitan.getLayoutX() + aTitan.getTranslateX());
+        aTitan.setLayoutY(aTitan.getLayoutY() + aTitan.getTranslateY());
         aTitan.setTranslateX(0);
         aTitan.setTranslateY(0);
-        x=aTitan.getLayoutX();
-        y=aTitan.getLayoutY();
+        x = aTitan.getLayoutX();
+        y = aTitan.getLayoutY();
     }
 
-    public void walk(){
+    public void walk() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(!isAnimating()){
+                if (!isAnimating) {
                     walkAni('a');
-                    isAnimating=true;
+                    isAnimating = true;
                     stop();
                 }
             }
         }.start();
     }
 
-    private void walk(char mode){
+    private void walkAfterMove(char mode) {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -186,58 +186,47 @@ public class ArmouredTitanView {
         }.start();
     }
 
-    public void left(){
+    public void left() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(!isAnimating()){
+                if (!isAnimating) {
                     leftAni();
-                    isAnimating=true;
+                    isAnimating = true;
                     stop();
                 }
             }
         }.start();
     }
 
-    public void right(){
+    public void right() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(!isAnimating()){
+                if (!isAnimating) {
                     rightAni();
-                    isAnimating=true;
+                    isAnimating = true;
                     stop();
                 }
             }
         }.start();
     }
 
-    public void attack(){
+    public void attack() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(!isAnimating()){
+                if (!isAnimating) {
                     attackAni();
-                    isAnimating=true;
+                    isAnimating = true;
                     stop();
                 }
             }
         }.start();
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
     }
 
     public ImageView getView() {
         return aTitan;
     }
 
-    public boolean isAnimating() {
-        return isAnimating;
-    }
 }

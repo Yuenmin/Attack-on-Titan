@@ -130,9 +130,7 @@ public class App extends Application {
             @Override
             public void handle(long now) {
                 if (!soldier.isAnimating()) {
-                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(900), actionEvent -> gameInfo.drawWallHp()));
-                    timeline.setCycleCount(Animation.INDEFINITE);
-                    timeline.play();
+                    gameInfo.drawWallHp();
                     gameInfo.drawInfoPane();
                     group.getChildren().add(gameInfo.getGameInfo());
                     UPGRADEStage = new Stage();
@@ -236,13 +234,6 @@ public class App extends Application {
                     delay(1000);
                 } while (UPGRADEStage.isShowing());
 
-                try {
-                    upgradeMultipleWeapons(Controller.CWeaponStr);
-                    addHpToTheWall(Controller.CWallStr, Controller.UpHPStr);
-                } catch (NullPointerException ignored) {
-
-                }
-
                 Timeline timeline = new Timeline();
                 KeyFrame kf1 = new KeyFrame(Duration.millis(0), actionEvent -> cannon.show());
                 KeyFrame kf2 = new KeyFrame(Duration.millis(1000), actionEvent -> attackTitan());
@@ -276,11 +267,11 @@ public class App extends Application {
                 }
             }
             if (hour.getCurrentHour() >= 0) {
-                delay(4000);
+                //delay(4000);
                 hour.nextHour();
                 coinView.coinAni();
                 coin.increaseCoinPerHours();
-                delay(1500);
+                //delay(1000);
             }
         }
     }
@@ -295,10 +286,10 @@ public class App extends Application {
 
     public int spawnTitan() {
         Random r = new Random();
+        int max = 10;
         int size = ground.getCTitanList().size();
         int ran;
         do {
-            int max = 10;
             ran = r.nextInt(max);
             ground.addColossusTitan(ran);
         } while (ground.getCTitanList().size() == size);
@@ -364,16 +355,10 @@ public class App extends Application {
                         }
                         if (canAttack) {
                             attackWall(i, j);
-                            boolean canMove = false;
-                            Iterator<ColossusTitanView> iterator1 = ground.getCTitanList().iterator();
-                            while (!canMove) {
-                                if (!iterator1.hasNext()) {
-                                    iterator1 = ground.getCTitanList().iterator();
-                                }
-                                canMove = !iterator1.next().isAnimating();
-                            }
                             ground.move(i, j);
                         }
+                    } else if (titans[i][j] instanceof ArmouredTitan) {
+
                     }
                     if (ground.isMoveRight()) {
                         j++;
@@ -406,14 +391,16 @@ public class App extends Application {
                 c--;
             }
         }
-
     }
 
     private static void upgradeWeapon(Weapon weapon) {
         int upgradeCost = weapon.getUpgradeCost();
         //System.out.println("UCOST: " + upgradeCost);
         if (upgradeCost > coin.getCurCoin()) {
-            System.out.println("Not enough money!");
+            System.out.println("Not enough money!Weapon");
+            Platform.runLater(() -> {
+                gameInfo.drawNotEnoughCoinWeapon();
+            });
         } else {
             weapon.upgrade();
             coin.pay(upgradeCost);
@@ -432,6 +419,9 @@ public class App extends Application {
 
                     if (hp > coin.getCurCoin()) {
                         System.out.println("Your money is not enough");
+                        Platform.runLater(() -> {
+                            gameInfo.drawNotEnoughCoinWall();
+                        });
                     } else {
                         WallUnit wallUnit = wall.get(i);
                         wallUnit.addHp(hp);
@@ -446,6 +436,9 @@ public class App extends Application {
                     if (index >= 0 && index <= 9) { // is wall index
                         if (hp > coin.getCurCoin()) {
                             System.out.println("Your money is not enough");
+                            Platform.runLater(() -> {
+                                gameInfo.drawNotEnoughCoinWall();
+                            });
                         } else {
                             WallUnit wallUnit = wall.get(index);
                             wallUnit.addHp(hp);
@@ -454,6 +447,7 @@ public class App extends Application {
                     }
                 }
             }
+            gameInfo.drawWallHp();
         }
     }
 
@@ -481,7 +475,6 @@ public class App extends Application {
             curTitan.getColossusTitanView().attack();
             WallUnit wallUnit = wall.get(curColumn);
             Weapon weapon = wallUnit.getWeapon();
-            delay(1500);
             if (weapon.getLevel() > 0 && curTitan instanceof ArmouredTitan) {
                 // attack weapon
                 weapon.destroy();

@@ -1,9 +1,6 @@
 package com.attackontitan;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -25,11 +22,13 @@ public class GameInfo {
     private Group hourGroup = new Group();
     private Group titanHealthBar = new Group();
     private Group damageGroup = new Group();
+    private Group noCoinWeapon = new Group();
+    private Group noCoinWall = new Group();
     private Rectangle rectangle = new Rectangle();
     private int[] curHp;
 
     public GameInfo() {
-        gameInfo.getChildren().addAll(rectangle, wallHp, coinGroup, hourGroup, titanHealthBar, damageGroup);
+        gameInfo.getChildren().addAll(rectangle, wallHp, coinGroup, hourGroup, titanHealthBar, damageGroup, noCoinWall, noCoinWeapon);
         curHp = new int[]{50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
     }
 
@@ -64,12 +63,7 @@ public class GameInfo {
             hp.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
             boolean blink = wallHpChanged(i, healthPoint);
             if (blink) {
-                Timeline timeline = new Timeline();
-                KeyFrame kf1 = new KeyFrame(Duration.millis(150), actionEvent -> hp.setVisible(false));
-                KeyFrame kf2 = new KeyFrame(Duration.millis(300), actionEvent -> hp.setVisible(true));
-                timeline.getKeyFrames().addAll(kf1, kf2);
-                timeline.setCycleCount(3);
-                timeline.play();
+                wallHpBlink(i);
             }
             if (healthPoint >= 40) {
                 hp.setFill(Color.LAWNGREEN);
@@ -78,10 +72,21 @@ public class GameInfo {
             } else {
                 hp.setFill(Color.RED);
             }
-            wallHp.getChildren().addAll(wall, hp);
+            wallHp.getChildren().add(hp);
+            wallHp.getChildren().add(wall);
             yIncrement += 40;
         }
         wallHp.getChildren().add(heart);
+    }
+
+    public void wallHpBlink(int i) {
+        int finalI = i * 2;
+        Timeline timeline = new Timeline();
+        KeyFrame kf1 = new KeyFrame(Duration.millis(150), actionEvent -> wallHp.getChildren().get(finalI).setVisible(false));
+        KeyFrame kf2 = new KeyFrame(Duration.millis(300), actionEvent -> wallHp.getChildren().get(finalI).setVisible(true));
+        timeline.getKeyFrames().addAll(kf1, kf2);
+        timeline.setCycleCount(3);
+        timeline.play();
     }
 
     public boolean wallHpChanged(int i, int healthPoint) {
@@ -97,24 +102,29 @@ public class GameInfo {
     }
 
     public void wallDamage(int wallIndex, int damage) {
-        Platform.runLater(() -> {
-            int xIncrement = 0;
-            for (int i = 0; i <= 9; i++) {
-                if (i == wallIndex) {
-                    Text text = new Text(75 + xIncrement, 700, "-" + damage);
-                    text.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
-                    text.setFill(Color.RED);
-                    damageGroup.getChildren().add(text);
-                    TranslateTransition t = setTransition(text, 0, -20);
-                    t.setOnFinished(actionEvent -> {
-                        text.setText("");
-                        text.setTranslateX(0);
-                    });
-                    setFadeTransition(text, 1500);
-                }
-                xIncrement += 120;
-            }
-        });
+        PauseTransition pauseTransition = new PauseTransition(Duration.millis(1500));
+        pauseTransition.play();
+        pauseTransition.setOnFinished(actionEvent ->
+                Platform.runLater(() -> {
+                    int xIncrement = 0;
+                    for (int i = 0; i <= 9; i++) {
+                        if (i == wallIndex) {
+                            Text text = new Text(100 + xIncrement, 700, "-" + damage);
+                            text.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
+                            text.setFill(Color.RED);
+                            damageGroup.getChildren().add(text);
+                            TranslateTransition t = setTransition(text, 0, -20);
+                            t.setOnFinished(e -> {
+                                text.setText("");
+                                text.setTranslateX(0);
+                            });
+                            setFadeTransition(text, 1500);
+                        }
+                        xIncrement += 120;
+                    }
+                    drawWallHp();
+                })
+        );
     }
 
     public void drawCoinNum() {
@@ -123,6 +133,52 @@ public class GameInfo {
         coinNum.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
         coinNum.setFill(Color.WHITE);
         coinGroup.getChildren().addAll(coinNum, App.getCoinView().getCoinImage(), App.getCoinView().getCoinIncrease());
+    }
+
+    public void drawNotEnoughCoinWeapon() {
+        Text text = new Text();
+        text.setText("Coins not enough to upgrade all WEAPONS");
+        text.setLayoutX(App.getCoinView().getCoinImage().getLayoutX() - 360);
+        text.setLayoutY(App.getCoinView().getCoinImage().getLayoutY());
+        text.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
+        text.setFill(Color.RED);
+        TranslateTransition t4 = new TranslateTransition();
+        t4.setNode(text);
+        t4.setByY(-10);
+        t4.setDuration(Duration.millis(8000));
+        t4.play();
+        t4.setOnFinished(actionEvent -> {
+            text.setText("");
+            text.setTranslateY(0);
+        });
+        FadeTransition ft = new FadeTransition(Duration.millis(5000), text);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.play();
+        noCoinWeapon.getChildren().add(text);
+    }
+
+    public void drawNotEnoughCoinWall() {
+        Text text = new Text();
+        text.setText("Coins not enough to upgrade all WALLS");
+        text.setLayoutX(App.getCoinView().getCoinImage().getLayoutX() - 360);
+        text.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() + 30);
+        text.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
+        text.setFill(Color.RED);
+        TranslateTransition t4 = new TranslateTransition();
+        t4.setNode(text);
+        t4.setByY(-10);
+        t4.setDuration(Duration.millis(9000));
+        t4.play();
+        t4.setOnFinished(actionEvent -> {
+            text.setText("");
+            text.setTranslateY(0);
+        });
+        FadeTransition ft = new FadeTransition(Duration.millis(6000), text);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.play();
+        noCoinWall.getChildren().add(text);
     }
 
     public void drawHourNum() {
@@ -140,17 +196,20 @@ public class GameInfo {
     public void drawTitanHp(Titan titan, int healthPoint) {
         double x;
         double y;
+        double maxHp;
         if (titan instanceof ArmouredTitan) {
             x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX();
             y = titan.getArmouredTitanView().getView().getLayoutY() + titan.getArmouredTitanView().getView().getTranslateY();
+            maxHp = 100.0;
         } else {
             x = titan.getColossusTitanView().getView().getLayoutX() + titan.getColossusTitanView().getView().getTranslateX();
             y = titan.getColossusTitanView().getView().getLayoutY() + titan.getColossusTitanView().getView().getTranslateY();
+            maxHp = 50.0;
         }
         if (healthPoint < 0) {
             healthPoint = 0;
         }
-        HealthBar healthBar = new HealthBar(x + 7, y, healthPoint / 50.0);
+        HealthBar healthBar = new HealthBar(x + 7, y, healthPoint / maxHp);
         Text hp = new Text(x + 20, y - 2, Integer.toString(healthPoint));
         hp.setFont(Font.font("Calibri", FontWeight.SEMI_BOLD, 15));
         hp.setFill(Color.WHITE);

@@ -70,13 +70,13 @@ public class Controller implements Initializable {
     public void handleButtonActionU1(ActionEvent event) {
         try {
             CWeaponStr = chooseWeapon.getText();
-            if (!(CWeaponStr.equalsIgnoreCase("Go") || onlyDigits(CWeaponStr, CWeaponStr.length()))) {
+            if (!CWeaponStr.equalsIgnoreCase("Go") && (!onlyDigits(CWeaponStr, CWeaponStr.length()) || contains3OrMoreSameDigits(CWeaponStr, CWeaponStr.length()))) {
                 Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard.fxml"));
                 Scene NAMEScene = new Scene(NAMEParent);
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 window.setScene(NAMEScene);
             }
-
+            App.upgradeMultipleWeapons(Controller.CWeaponStr);
             Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard2.fxml"));
             Scene NAMEScene = new Scene(NAMEParent);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -134,6 +134,7 @@ public class Controller implements Initializable {
             if (cAll) {
                 CWallStr = "0123456789";
             }
+            App.addHpToTheWall(Controller.CWallStr, Controller.UpHPStr);
 
             //close upgradeBoard
             window.close();
