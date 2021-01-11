@@ -77,6 +77,7 @@ public class Controller implements Initializable {
             stage.show();
         } else {
             stage.close();
+            TF1.requestFocus();
             stage = null;
         }
     }
@@ -93,6 +94,7 @@ public class Controller implements Initializable {
             stage.show();
         } else {
             stage.close();
+            TF1.requestFocus();
             stage = null;
         }
     }

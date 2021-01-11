@@ -22,6 +22,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import javafx.scene.control.Tooltip;
 
 public class GameInfo {
 
@@ -265,6 +266,7 @@ public class GameInfo {
         imageView.setLayoutY(-220);
         imageView.setScaleX(0.1);
         imageView.setScaleY(0.1);
+        Tooltip.install(imageView, new Tooltip("Game Rules"));
         imageView.setOnMouseClicked(new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {

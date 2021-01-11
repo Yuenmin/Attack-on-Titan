@@ -7,6 +7,7 @@ public class ColossusTitan extends Titan {
         this.attackPoint = 10;
         this.currentColumn = column;
         this.currentRow = row;
+        this.canMove=true;
         this.colossusTitanView =new ColossusTitanView(column);
 	}
 

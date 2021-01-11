@@ -289,14 +289,13 @@ public class App extends Application {
         int position;
         do {
             position = r.nextInt(max/2)*2;
-            ground.addColossusTitan(position);
-            /*if(r.nextInt(2) == 0){
+            if(r.nextInt(1) == 0){
                 ground.addArmouredTitan(position);
             }else{
                 ground.addColossusTitan(position);
-            }*/
+            }
 
-        } while (ground.getCTitanList().size() == size /*&& ground.getATitanList().size() == size*/);
+        } while (ground.getCTitanList().size() == size && ground.getATitanList().size() == size);
 
         return position;
     }
@@ -336,30 +335,6 @@ public class App extends Application {
             ground.getATitanList().removeIf(titan -> !titan.getView().isVisible());
             ground.getCTitanList().removeIf(titan -> !titan.getView().isVisible());
         });
-    }
-
-    public void titanMoveOrAttack(ArrayList<Integer> newTitan) {
-        Titan[][] titans = ground.getTitans();
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 20; j++) {
-                if (titans[i][j] != null) {
-                    //check for newTitan
-                    Iterator<Integer> iterator = newTitan.iterator();
-                    boolean canAttack = true;
-                    while (iterator.hasNext()) {
-                        if (j == iterator.next()) {
-                            canAttack = false;
-                            break;
-                        }
-                    }
-                    if (canAttack) {
-                        attackWall(i, j);
-                        //ground.move(i,j);
-                    }
-
-                }
-            }
-        }
     }
 
     // Q1

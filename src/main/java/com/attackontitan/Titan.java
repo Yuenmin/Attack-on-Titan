@@ -9,6 +9,8 @@ public abstract class Titan {
 
     protected ColossusTitanView colossusTitanView;
     protected ArmouredTitanView armouredTitanView;
+    
+    protected boolean canMove;
 
     public int getCurrentRow() {
         return currentRow;

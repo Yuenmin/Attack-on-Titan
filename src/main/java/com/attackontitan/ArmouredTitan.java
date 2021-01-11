@@ -7,7 +7,8 @@ public class ArmouredTitan extends Titan {
         this.attackPoint = 5;
         this.currentColumn = col;
         this.currentRow = row;
-        this.armouredTitanView=new ArmouredTitanView(col/2);
+        this.canMove=true;
+        this.armouredTitanView=new ArmouredTitanView(col/2.0);
     }
 
     @Override

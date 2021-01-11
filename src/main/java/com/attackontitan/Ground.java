@@ -72,7 +72,7 @@ public class Ground {
     }
 
     public void addArmouredTitan(int column) {
-        System.out.println("adding armoured");
+        //System.out.println("adding armoured");
         Titan curTitan = titans[0][column];
         Titan armouredTitan = new ArmouredTitan(column, 0);
         if (curTitan == null) {
@@ -88,22 +88,21 @@ public class Ground {
     }
 
     public void move(ArrayList<Integer> newTitan) {
-        System.out.println("moving titan");
+        //System.out.println("moving titan");
         Random ran = new Random();
         Wall wall = new Wall();
-        int r = ran.nextInt(3);
         int curRow, curColumn;
         boolean ccMoved = false;
         boolean aaMoved = false;
+        
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 20; j++) {
                 Titan curTitan = titans[i][j];
-                if (curTitan != null) {
-                    boolean movedRight = false;
+                if (curTitan != null && curTitan.canMove) {
                     //System.out.println(curTitan.getName());
                     curRow = curTitan.currentRow;
                     curColumn = curTitan.currentColumn;
-                    System.out.println(curTitan.currentColumn);
+                    //System.out.println(curTitan.currentRow);
 
                     Iterator<Integer> iterator = newTitan.iterator();
                     boolean canAttack = true;
@@ -115,12 +114,11 @@ public class Ground {
                     }
                     if (canAttack) {
                         App.attackWall(curRow, curColumn);
-                        if (curTitan instanceof ColossusTitan && !ccMoved) {
-                            System.out.println(isMoveRightAvailable(curRow, curColumn)+" "+isMoveLeftAvailable(curRow,curColumn));
+                        if (curTitan instanceof ColossusTitan) {
+                            curTitan.canMove=false;
                             if (isMoveLeftAndRightAvailable(curRow, curColumn)) {
                                 if (ran.nextInt(2) == 1) {
                                     // moveRight
-                                    System.out.println("Right1");
                                     curTitan.getColossusTitanView().right();
                                     if (this.titans[curRow][curColumn + 2] == null) {
                                         this.titans[curRow][curColumn + 2] = curTitan;
@@ -132,10 +130,9 @@ public class Ground {
                                         this.titans[curRow][curColumn + 2].setPosition(curRow, curColumn + 2);
                                     }
                                     ccMoved = true;
-                                    movedRight = true;
+                                    
                                 } else {
                                     // move left
-                                    System.out.println("Left1");
                                     curTitan.getColossusTitanView().left();
                                     if (this.titans[curRow][curColumn - 2] == null) {
                                         this.titans[curRow][curColumn - 2] = curTitan;
@@ -151,7 +148,6 @@ public class Ground {
                             } else if (isMoveLeftAvailable(curRow, curColumn)) {
                                 if (ran.nextInt(2) == 1) {
                                     // move left
-                                    System.out.println("left2");
                                     curTitan.getColossusTitanView().left();
                                     if (this.titans[curRow][curColumn - 2] == null) {
                                         this.titans[curRow][curColumn - 2] = curTitan;
@@ -165,105 +161,117 @@ public class Ground {
                                     }
                                     ccMoved = true;
                                 } else {
-                                    System.out.println("leftnotmove1");
+                                    //  not move
+                                }
+                            } else if (isMoveRightAvailable(curRow, curColumn)) {
+                                if (ran.nextInt(2) == 1) {
+                                    // move right
+                                    curTitan.getColossusTitanView().right();
+                                    if (this.titans[curRow][curColumn + 2] == null) {
+                                        this.titans[curRow][curColumn + 2] = curTitan;
+                                        this.titans[curRow][curColumn] = null;
+                                        curTitan.setPosition(curRow, curColumn + 2);
+                                    } else {
+                                        this.titans[curRow][curColumn + 2] = new ArmouredAndColossusTitan((ArmouredTitan) this.titans[curRow][curColumn + 2], (ColossusTitan) curTitan);
+                                        this.titans[curRow][curColumn] = null;
+                                        this.titans[curRow][curColumn + 2].setPosition(curRow, curColumn + 2);
+                                    }
+                                    ccMoved = true;
+                                  
+                                } else {
+                                    //  not move
+                                }
+                            } else {
+                                // not move
+                            }
+                        } else if (curTitan instanceof ArmouredTitan ) {
+                            curTitan.canMove=false;
+                            
+                            //System.out.println(isMoveLeftAvailable(curRow, curColumn)+" "+isMoveRightAvailable(curRow, curColumn));
+                            if (isMoveLeftAndRightAvailable(curRow, curColumn)) {
+                                if (ran.nextInt(2) == 1) {
+                                    // moveRight
+                                    System.out.println("right1");
+                                    curTitan.getArmouredTitanView().right();
+                                    if (this.titans[curRow + 1][curColumn + 2] == null) {
+                                        this.titans[curRow + 1][curColumn + 2] = curTitan;
+                                        this.titans[curRow][curColumn] = null;
+                                        curTitan.setPosition(curRow + 1, curColumn + 2);
+
+                                    } else if(this.titans[curRow + 1][curColumn + 2] instanceof ColossusTitan){
+                                        this.titans[curRow + 1][curColumn + 2] = new ArmouredAndColossusTitan((ArmouredTitan) curTitan, (ColossusTitan) this.titans[curRow + 1][curColumn + 2]);
+                                        this.titans[curRow][curColumn] = null;
+                                        this.titans[curRow + 1][curColumn + 2].setPosition(curRow + 1, curColumn + 2);
+ 
+                                    }else{
+                                        //not move
+                                    }
+                                    aaMoved = true;
+                                } else {
+                                    // move left
+                                    System.out.println("left1");
+                                    curTitan.getArmouredTitanView().left();
+                                    if (this.titans[curRow + 1][curColumn - 2] == null) {
+                                        this.titans[curRow + 1][curColumn - 2] = curTitan;
+                                        this.titans[curRow][curColumn] = null;
+                                        curTitan.setPosition(curRow + 1, curColumn - 2);
+
+                                    } else if(this.titans[curRow + 1][curColumn - 2] instanceof ColossusTitan){
+                                        this.titans[curRow + 1][curColumn - 2] = new ArmouredAndColossusTitan((ArmouredTitan) curTitan, (ColossusTitan) this.titans[curRow + 1][curColumn - 2]);
+                                        this.titans[curRow][curColumn] = null;
+                                        this.titans[curRow + 1][curColumn - 2].setPosition(curRow + 1, curColumn - 2);
+
+                                    }else{
+                                        //not move
+                                    }
+                                    aaMoved = true;
+                                }
+                            } else if (isMoveLeftAvailable(curRow, curColumn)) {
+                                if (ran.nextInt(2) == 1) {
+                                    // move left
+                                    System.out.println("left2");
+                                    curTitan.getArmouredTitanView().left();
+                                    if (this.titans[curRow + 1][curColumn - 2] == null) {
+                                        this.titans[curRow + 1][curColumn - 2] = curTitan;
+                                        this.titans[curRow][curColumn] = null;
+                                        curTitan.setPosition(curRow + 1, curColumn - 2);
+
+                                    } else if(this.titans[curRow + 1][curColumn - 2] instanceof ColossusTitan){
+                                        this.titans[curRow + 1][curColumn - 2] = new ArmouredAndColossusTitan((ArmouredTitan) curTitan, (ColossusTitan) this.titans[curRow + 1][curColumn - 2]);
+                                        this.titans[curRow][curColumn] = null;
+                                        this.titans[curRow + 1][curColumn - 2].setPosition(curRow + 1, curColumn - 2);
+
+                                    }
+                                    else{
+                                        //not move
+                                    }
+                                    aaMoved = true;
+                                } else {
+                                    System.out.println("leftnotmove");
                                     //  not move
                                 }
                             } else if (isMoveRightAvailable(curRow, curColumn)) {
                                 if (ran.nextInt(2) == 1) {
                                     // move right
                                     System.out.println("right2");
-                                    curTitan.getColossusTitanView().right();
-                                    if (this.titans[curRow][curColumn + 2] == null) {
-                                        this.titans[curRow][curColumn + 2] = curTitan;
-                                        this.titans[curRow][curColumn] = null;
-                                        curTitan.setPosition(curRow, curColumn + 2);
-                                    } else {
-                                        this.titans[curRow][curColumn + 2] = new ArmouredAndColossusTitan((ArmouredTitan) this.titans[curRow][curColumn + 2], (ColossusTitan) curTitan);
-                                        this.titans[curRow][curColumn] = null;
-                                        this.titans[curRow][curColumn + 2].setPosition(curRow, curColumn + 2);
-                                    }
-                                    ccMoved = true;
-                                    movedRight = true;
-                                } else {
-                                    //  not move
-                                    System.out.println("rightnotmove");
-                                }
-                            } else {
-                                // not move
-                                System.out.println("noleftright");
-                            }
-                        } else if (curTitan instanceof ArmouredTitan && !aaMoved) {
-                            if (isMoveLeftAndRightAvailable(curRow, curColumn)) {
-                                if (ran.nextInt(2) == 1) {
-                                    // moveRight
                                     curTitan.getArmouredTitanView().right();
                                     if (this.titans[curRow + 1][curColumn + 2] == null) {
                                         this.titans[curRow + 1][curColumn + 2] = curTitan;
                                         this.titans[curRow][curColumn] = null;
                                         curTitan.setPosition(curRow + 1, curColumn + 2);
 
-                                    } else {
-                                        this.titans[curRow + 1][curColumn + 2] = new ArmouredAndColossusTitan((ArmouredTitan) this.titans[curRow + 1][curColumn + 2], (ColossusTitan) curTitan);
+                                    } else if(this.titans[curRow + 1][curColumn + 2] instanceof ColossusTitan){
+                                        this.titans[curRow + 1][curColumn + 2] = new ArmouredAndColossusTitan((ArmouredTitan) curTitan, (ColossusTitan) this.titans[curRow + 1][curColumn + 2]);
                                         this.titans[curRow][curColumn] = null;
                                         this.titans[curRow + 1][curColumn + 2].setPosition(curRow + 1, curColumn + 2);
 
-                                    }
-                                    aaMoved = true;
-                                    movedRight = true;
-                                } else {
-                                    // move left
-                                    curTitan.getArmouredTitanView().left();
-                                    if (this.titans[curRow + 1][curColumn - 2] == null) {
-                                        this.titans[curRow + 1][curColumn - 2] = curTitan;
-                                        this.titans[curRow][curColumn] = null;
-                                        curTitan.setPosition(curRow + 1, curColumn - 2);
-
-                                    } else {
-                                        this.titans[curRow + 1][curColumn - 2] = new ArmouredAndColossusTitan((ArmouredTitan) this.titans[curRow + 1][curColumn - 2], (ColossusTitan) curTitan);
-                                        this.titans[curRow][curColumn] = null;
-                                        this.titans[curRow + 1][curColumn - 2].setPosition(curRow + 1, curColumn - 2);
-
-                                    }
-                                    aaMoved = true;
-                                }
-                            } else if (isMoveLeftAvailable(curRow, curColumn)) {
-                                if (ran.nextInt(2) == 1) {
-                                    // move left
-                                    curTitan.getArmouredTitanView().left();
-                                    if (this.titans[curRow + 1][curColumn - 2] == null) {
-                                        this.titans[curRow + 1][curColumn - 2] = curTitan;
-                                        this.titans[curRow][curColumn] = null;
-                                        curTitan.setPosition(curRow + 1, curColumn - 2);
-
-                                    } else {
-                                        this.titans[curRow + 1][curColumn - 2] = new ArmouredAndColossusTitan((ArmouredTitan) this.titans[curRow + 1][curColumn - 2], (ColossusTitan) curTitan);
-                                        this.titans[curRow][curColumn] = null;
-                                        this.titans[curRow + 1][curColumn - 2].setPosition(curRow + 1, curColumn - 2);
-
+                                    }else{
+                                        //not move
                                     }
                                     aaMoved = true;
                                 } else {
                                     //  not move
-                                }
-                            } else if (isMoveRightAvailable(curRow, curColumn)) {
-                                if (ran.nextInt(2) == 1) {
-                                    // move right
-                                    curTitan.getArmouredTitanView().right();
-                                    if (this.titans[curRow + 1][curColumn + 2] == null) {
-                                        this.titans[curRow + 1][curColumn + 2] = curTitan;
-                                        this.titans[curRow][curColumn] = null;
-                                        curTitan.setPosition(curRow + 1, curColumn + 2);
-
-                                    } else {
-                                        this.titans[curRow + 1][curColumn + 2] = new ArmouredAndColossusTitan((ArmouredTitan) this.titans[curRow + 1][curColumn + 2], (ColossusTitan) curTitan);
-                                        this.titans[curRow][curColumn] = null;
-                                        this.titans[curRow + 1][curColumn + 2].setPosition(curRow + 1, curColumn + 2);
-
-                                    }
-                                    aaMoved = true;
-                                } else {
-                                    //  not move
-                                    System.out.println("no move 1");
+                                    System.out.println("rightnomove 1");
                                 }
                             } else {
                                 // not move
@@ -274,9 +282,16 @@ public class Ground {
                             System.out.println("no move 3");
                         }
                     }
-                    if (movedRight) {
-                        j += 2;
-                    }
+                   
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 20; j++) {
+                
+                Titan curTitan = titans[i][j];
+                if(curTitan!=null){
+                curTitan.canMove=true;
                 }
             }
         }
@@ -291,7 +306,7 @@ public class Ground {
     }
 
     public boolean isMoveRightAvailable(int curRow, int curColumn) {
-        if (curColumn < 9) {
+        if (curColumn <18) {
             return this.titans[curRow][curColumn + 2] == null || isCanOverlapTitan(this.titans[curRow][curColumn + 2], this.titans[curRow][curColumn]);
         }
         return false;
