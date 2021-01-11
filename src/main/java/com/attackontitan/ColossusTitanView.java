@@ -22,7 +22,8 @@ public class ColossusTitanView {
     private double y;
     private boolean isAnimating;
 
-    public ColossusTitanView(int column){
+    public ColossusTitanView(int column) {
+        column /= 2;
         initImage();
         x = 105 + (column * 120);
         y = 545;

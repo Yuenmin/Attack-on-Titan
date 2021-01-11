@@ -1,21 +1,27 @@
 package com.attackontitan;
 
 public abstract class Titan {
-//    protected int currentRow;
-//    protected int currentColumn;
+    protected int currentRow;
+    protected int currentColumn;
 
     protected int hp;
     protected int attackPoint;
+
     protected ColossusTitanView colossusTitanView;
     protected ArmouredTitanView armouredTitanView;
 
-//    public int getCurrentRow() {
-//        return currentRow;
-//    }
-//
-//    public int getCurrentColumn() {
-//        return currentColumn;
-//    }
+    public int getCurrentRow() {
+        return currentRow;
+    }
+
+    public int getCurrentColumn() {
+        return currentColumn;
+    }
+
+    public void setPosition(int row, int col) {
+        this.currentRow = row;
+        this.currentColumn = col;
+    }
 
     public int getAttackPoint() {
         return this.attackPoint;
@@ -63,7 +69,7 @@ public abstract class Titan {
 
     abstract String getName();
 
-//    public boolean isFrontOfTheWall() {
-//        return this.currentRow == 9;
-//    }
+    public boolean isFrontOfTheWall() {
+        return this.currentRow == 9;
+    }
 }

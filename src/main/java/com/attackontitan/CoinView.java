@@ -28,7 +28,7 @@ public class CoinView {
         coinImage.setImage(coinArray[1]);
         coinImage.setScaleX(1.05);
         coinImage.setLayoutX(1285);
-        coinImage.setLayoutY(110);
+        coinImage.setLayoutY(130);
     }
 
     public void coinAni(){

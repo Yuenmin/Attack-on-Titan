@@ -1,27 +1,23 @@
 package com.attackontitan;
 
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.scene.control.TextField;
 
 public class Controller implements Initializable {
 
@@ -34,36 +30,70 @@ public class Controller implements Initializable {
     @FXML
     private TextField fillHP;
 
-    protected static String name, CWeaponStr, CWallStr, UpHPStr = "0";
+    private static String CWeaponStr, CWallStr, UpHPStr = "0";
     private static int CWallStrLen;
-    protected static boolean cAll = false;
+    private static boolean cAll = false;
     private double xOffset;
     private double yOffset;
+    private Stage stage;
 
+    @FXML
     public void handleButtonAction(ActionEvent event) throws IOException {
 
-        Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("NAME.fxml"));
-        Scene NAMEScene = new Scene(NAMEParent, App.getWidth(), App.getHeight());
+        Parent nameParent = FXMLLoader.load(this.getClass().getResource("NAME.fxml"));
+        Scene nameScene = new Scene(nameParent, App.getWidth(), App.getHeight());
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), NAMEParent);
+        FadeTransition ft = new FadeTransition(Duration.millis(1000), nameParent);
         ft.setFromValue(0.0);
         ft.setToValue(1.0);
         ft.play();
-        window.setScene(NAMEScene);
+        window.setScene(nameScene);
     }
 
+    @FXML
     public void handleButtonAction2(ActionEvent event) throws IOException {
-
-        name = TF1.getText();
+        String name = TF1.getText();
         if (name.isEmpty() || name.isBlank()) {
-            Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("NAME.fxml"));
-            Scene NAMEScene = new Scene(NAMEParent, App.getWidth(), App.getHeight());
+            Parent nameParent = FXMLLoader.load(this.getClass().getResource("NAME.fxml"));
+            Scene nameScene = new Scene(nameParent, App.getWidth(), App.getHeight());
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(NAMEScene);
+            window.setScene(nameScene);
 
         } else {
             App app = new App();
+            App.getScoreBoard().setNewName(name);
             app.initMap();
+        }
+    }
+
+    @FXML
+    public void showGameRules() throws Exception {
+        if (stage == null) {
+            Parent instruction = FXMLLoader.load(this.getClass().getResource("Instruction.fxml"));
+            stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initOwner(App.getPrimaryStage());
+            stage.setScene(new Scene(instruction));
+            stage.show();
+        } else {
+            stage.close();
+            stage = null;
+        }
+    }
+
+    public void showLeaderBoard() {
+        if (stage == null) {
+            stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initOwner(App.getPrimaryStage());
+            App.getScoreBoard().sort();
+            Scene scene = new Scene(App.getScoreBoard().getScoreBoard());
+            scene.getStylesheets().add("file:src/main/resources/com/attackontitan/tableview.css");
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            stage.close();
+            stage = null;
         }
     }
 
@@ -71,16 +101,14 @@ public class Controller implements Initializable {
         try {
             CWeaponStr = chooseWeapon.getText();
             if (!CWeaponStr.equalsIgnoreCase("Go") && (!onlyDigits(CWeaponStr, CWeaponStr.length()) || contains3OrMoreSameDigits(CWeaponStr, CWeaponStr.length()))) {
-                Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard.fxml"));
-                Scene NAMEScene = new Scene(NAMEParent);
+                Parent q1 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard.fxml"));
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                window.setScene(NAMEScene);
+                window.setScene(new Scene(q1));
             }
-            App.upgradeMultipleWeapons(Controller.CWeaponStr);
-            Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard2.fxml"));
-            Scene NAMEScene = new Scene(NAMEParent);
+            App.upgradeMultipleWeapons(CWeaponStr);
+            Parent q2 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard2.fxml"));
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(NAMEScene);
+            window.setScene(new Scene(q2));
             App.getPrimaryStage().requestFocus();
 
         } catch (Exception ignored) {
@@ -95,15 +123,13 @@ public class Controller implements Initializable {
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             if (!CWallStr.equalsIgnoreCase("Go")) {
                 if (onlyDigits(CWallStr, CWallStrLen) && !duplicateDigits(CWallStr, CWallStrLen)) {
-                    Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
-                    Scene NAMEScene = new Scene(NAMEParent);
-                    window.setScene(NAMEScene);
+                    Parent q4 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
+                    window.setScene(new Scene(q4));
                     App.getPrimaryStage().requestFocus();
                     window.wait();
                 } else {
-                    Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard3.fxml"));
-                    Scene NAMEScene = new Scene(NAMEParent);
-                    window.setScene(NAMEScene);
+                    Parent q3 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard3.fxml"));
+                    window.setScene(new Scene(q3));
                     window.wait();
                 }
             }
@@ -117,24 +143,24 @@ public class Controller implements Initializable {
         try {
             UpHPStr = fillHP.getText();
             String[] UpHPStrArr = UpHPStr.strip().replaceAll("\\s+", " ").split(" ");
-            Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
-            Scene NAMEScene = new Scene(NAMEParent);
+            Parent q4 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
+            Scene q4Scene = new Scene(q4);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             if (cAll) {
                 if (UpHPStr.split(" ").length != 1 || !onlyDigits(UpHPStr, UpHPStr.length())) {
-                    window.setScene(NAMEScene);
+                    window.setScene(q4Scene);
                     window.wait();
                 }
             } else {
                 if (UpHPStr.split(" ").length != CWallStrLen || !onlyDigits(UpHPStrArr, UpHPStrArr.length)) {
-                    window.setScene(NAMEScene);
+                    window.setScene(q4Scene);
                     window.wait();
                 }
             }
             if (cAll) {
                 CWallStr = "0123456789";
             }
-            App.addHpToTheWall(Controller.CWallStr, Controller.UpHPStr);
+            App.addHpToTheWall(CWallStr, UpHPStr, cAll);
 
             //close upgradeBoard
             window.close();
@@ -145,20 +171,18 @@ public class Controller implements Initializable {
 
     public void handleButtonActionYes(ActionEvent event) throws IOException {
         cAll = true;
-        Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
-        Scene NAMEScene = new Scene(NAMEParent);
+        Parent q4 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard4.fxml"));
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(NAMEScene);
+        window.setScene(new Scene(q4));
         App.getPrimaryStage().requestFocus();
 
     }
 
     public void handleButtonActionNo(ActionEvent event) throws IOException {
         cAll = false;
-        Parent NAMEParent = FXMLLoader.load(this.getClass().getResource("UpgradeBoard3.fxml"));
-        Scene NAMEScene = new Scene(NAMEParent);
+        Parent q3 = FXMLLoader.load(this.getClass().getResource("UpgradeBoard3.fxml"));
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(NAMEScene);
+        window.setScene(new Scene(q3));
         App.getPrimaryStage().requestFocus();
 
     }
@@ -169,16 +193,16 @@ public class Controller implements Initializable {
     }
 
     public void onDragged(MouseEvent event) {
-        App.getUPGRADEStage().setX(event.getScreenX() - xOffset);
-        App.getUPGRADEStage().setY(event.getScreenY() - yOffset);
+        App.getUpgradeStage().setX(event.getScreenX() - xOffset);
+        App.getUpgradeStage().setY(event.getScreenY() - yOffset);
     }
 
     public void onEntered() {
-        App.getUPGRADEStage().setOpacity(1);
+        App.getUpgradeStage().setOpacity(1);
     }
 
     public void onExited() {
-        App.getUPGRADEStage().setOpacity(0.1);
+        App.getUpgradeStage().setOpacity(0.1);
     }
 
     public static boolean onlyDigits(String str, int n) {

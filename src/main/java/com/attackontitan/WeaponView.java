@@ -4,6 +4,8 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -51,7 +53,7 @@ public class WeaponView {
             for (int i = 0; i < 10; i++) {
                 FadeTransition ft = new FadeTransition(Duration.millis(2000), cannonGroup.getChildren().get(i));
                 ft.setFromValue(0.0);
-                ft.setToValue(1.0);
+                ft.setToValue(0.6);
                 ft.play();
             }
         } else {
@@ -59,7 +61,7 @@ public class WeaponView {
                 if (i == index) {
                     FadeTransition ft = new FadeTransition(Duration.millis(5000), cannonGroup.getChildren().get(i));
                     ft.setFromValue(0.0);
-                    ft.setToValue(1.0);
+                    ft.setToValue(0.6);
                     ft.play();
                 }
             }
@@ -68,22 +70,22 @@ public class WeaponView {
     }
 
     public void show() {
-        boolean[] gotTitan = new boolean[10];
+        boolean[] hasTitan = new boolean[10];
         Titan[][] titans = App.getGround().getTitans();
         for (int column = 0; column < 10; column++) {
             for (int row = 0; row < 10; row++) {
                 if (titans[row][column] != null) {
-                    gotTitan[column] = true;
+                    hasTitan[column] = true;
                     break;
                 } else {
-                    gotTitan[column] = false;
+                    hasTitan[column] = false;
                 }
             }
         }
         int x = 83;
         for (int j = 0; j < 10; j++) {
             boolean shoot = true;
-            if (App.getWall().get(j).getWeapon().getLevel() == 0 || !gotTitan[j]) {
+            if (App.getWall().get(j).getWeapon().getLevel() == 0 || !hasTitan[j]) {
                 shoot = false;
             }
             animation((ImageView) cannonGroup.getChildren().get(j), cannonImage, x, shoot);
@@ -121,6 +123,22 @@ public class WeaponView {
             cannon.setImage(cannonImage.get(0));
             cannon.setLayoutX(x);
             cannon.setLayoutY(y);
+        }
+    }
+
+    public void changeColour(int index, int level) {
+        Lighting lighting = new Lighting();
+        ImageView curCannon = (ImageView) cannonGroup.getChildren().get(index);
+        if (level == 3) {
+            lighting.setLight(new Light.Distant(45, 45, Color.RED));
+            curCannon.setEffect(lighting);
+            curCannon.setOpacity(1);
+        } else if (level == 2) {
+            lighting.setLight(new Light.Distant(45, 45, Color.YELLOW));
+            curCannon.setEffect(lighting);
+            curCannon.setOpacity(1);
+        } else if (level == 1) {
+            curCannon.setOpacity(1);
         }
     }
 

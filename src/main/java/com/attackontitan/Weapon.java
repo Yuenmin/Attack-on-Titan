@@ -12,8 +12,9 @@ public class Weapon {
     public void upgrade() {
         if (level >= 0 && level < 3) {
             level ++;
-        }else
-        System.out.println("Failed");
+        }else {
+            System.out.println("Failed");
+        }
     }
 
     public int getLevel() {
@@ -21,15 +22,16 @@ public class Weapon {
     }
 
     public int getAttack() {
-        return ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level];
+        return this.ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level];
     }
 
     public int getUpgradeCost() {
-        if (level < 0 || level >= 3) return 0;
-        return ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level + 1];
+        if (level < 0 || level == 3) return 0;
+        return this.ATTACK_AND_UPGRADE_COIN_PAYMENT_PER_LEVEL[this.level + 1];
     }
 
     public void destroy() {
-        level = 0;
+        this.level = 0;
+        System.out.println("weapon destroyed");
     }
 }

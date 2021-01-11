@@ -29,6 +29,7 @@ public class Wall {
 
     public void printToConsole() {
         for (int level = 3; level > 0; level--) {
+        	System.out.print("    ");
             for (int i = 0; i < 10; i++) {
                 if (wallUnits[i].getWeapon().getLevel() >= level) {
                     System.out.print("** ");
@@ -39,12 +40,11 @@ public class Wall {
             System.out.println();
         }
 
-        System.out.println("-- -- -- -- -- -- -- -- -- -- \t\tThe Wall");
-        System.out.println(" 0  1  2  3  4  5  6  7  8  9 \t\tIndex");
-        System.out.println(wallUnits[0].getHp() + " " + wallUnits[1].getHp() + " " + wallUnits[2].getHp() + " " + wallUnits[3].getHp() + " " + wallUnits[4].getHp() + " "
-                + wallUnits[5].getHp() + " " + wallUnits[6].getHp() + " " + wallUnits[7].getHp() + " " + wallUnits[8].getHp() + " " + wallUnits[9].getHp() + " \t\tHP");
-        System.out.println("-- -- -- -- -- -- -- -- -- -- ");
-
+        System.out.println("    -- -- -- -- -- -- -- -- -- -- \tThe Wall");
+        System.out.println("     0  1  2  3  4  5  6  7  8  9 \tIndex");
+        System.out.println("    " + wallUnits[0].getHp() + " " + wallUnits[1].getHp() + " " + wallUnits[2].getHp() + " " + wallUnits[3].getHp() + " " + wallUnits[4].getHp() + " "
+                + wallUnits[5].getHp() + " " + wallUnits[6].getHp() + " " + wallUnits[7].getHp() + " " + wallUnits[8].getHp() + " " + wallUnits[9].getHp() + " \tHP");
+        System.out.println("    -- -- -- -- -- -- -- -- -- -- ");
     }
 
     public WallUnit[] getWallUnits() {

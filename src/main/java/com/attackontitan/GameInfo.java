@@ -2,17 +2,26 @@ package com.attackontitan;
 
 import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
+import java.io.IOException;
 
 public class GameInfo {
 
@@ -22,21 +31,24 @@ public class GameInfo {
     private Group hourGroup = new Group();
     private Group titanHealthBar = new Group();
     private Group damageGroup = new Group();
+    private Group scoreGroup = new Group();
     private Group noCoinWeapon = new Group();
     private Group noCoinWall = new Group();
     private Rectangle rectangle = new Rectangle();
+    private Stage helpStage;
     private int[] curHp;
 
     public GameInfo() {
-        gameInfo.getChildren().addAll(rectangle, wallHp, coinGroup, hourGroup, titanHealthBar, damageGroup, noCoinWall, noCoinWeapon);
+        gameInfo.getChildren().addAll(rectangle, wallHp, coinGroup, hourGroup, titanHealthBar, damageGroup, scoreGroup, noCoinWall, noCoinWeapon);
         curHp = new int[]{50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
+        drawHelpButton();
     }
 
     public void drawInfoPane() {
         rectangle.setLayoutX(App.getCoinView().getCoinImage().getLayoutX() - 4);
-        rectangle.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() - 45);
+        rectangle.setLayoutY(App.getCoinView().getCoinImage().getLayoutY() - 55);
         rectangle.setWidth(70.0f);
-        rectangle.setHeight(530.0f);
+        rectangle.setHeight(540.0f);
         rectangle.setStroke(Color.rgb(94, 40, 13));
         rectangle.setFill(Color.rgb(168, 110, 27));
         rectangle.setStrokeWidth(3);
@@ -61,10 +73,7 @@ public class GameInfo {
             wall.setFill(Color.WHITE);
             Text hp = new Text(heart.getLayoutX() + 5, heart.getLayoutY() + yIncrement + hpIncrement, Integer.toString(healthPoint));
             hp.setFont(Font.font("Calibri", FontWeight.EXTRA_BOLD, 20));
-            boolean blink = wallHpChanged(i, healthPoint);
-            if (blink) {
-                wallHpBlink(i);
-            }
+            wallHpChanged(i, healthPoint);
             if (healthPoint >= 40) {
                 hp.setFill(Color.LAWNGREEN);
             } else if (healthPoint >= 20) {
@@ -79,6 +88,16 @@ public class GameInfo {
         wallHp.getChildren().add(heart);
     }
 
+    public void wallHpChanged(int i, int healthPoint) {
+        if (curHp[i] > healthPoint) {
+            curHp[i] = healthPoint;
+            wallHpBlink(i);
+        } else if (curHp[i] < healthPoint) {
+            curHp[i] = healthPoint;
+            Platform.runLater(() -> setFadeTransition(wallHp.getChildren().get(i * 2), 1000, 0, 1.0));
+        }
+    }
+
     public void wallHpBlink(int i) {
         int finalI = i * 2;
         Timeline timeline = new Timeline();
@@ -87,18 +106,6 @@ public class GameInfo {
         timeline.getKeyFrames().addAll(kf1, kf2);
         timeline.setCycleCount(3);
         timeline.play();
-    }
-
-    public boolean wallHpChanged(int i, int healthPoint) {
-        if (curHp[i] > healthPoint) {
-            curHp[i] = healthPoint;
-            return true;
-        } else if (curHp[i] < healthPoint) {
-            curHp[i] = healthPoint;
-            return false;
-        } else {
-            return false;
-        }
     }
 
     public void wallDamage(int wallIndex, int damage) {
@@ -118,7 +125,7 @@ public class GameInfo {
                                 text.setText("");
                                 text.setTranslateX(0);
                             });
-                            setFadeTransition(text, 1500);
+                            setFadeTransition(text, 1500, 1.0, 0);
                         }
                         xIncrement += 120;
                     }
@@ -127,9 +134,9 @@ public class GameInfo {
         );
     }
 
-    public void drawCoinNum() {
+    public void drawCoinNum(int coin) {
         coinGroup.getChildren().clear();
-        Text coinNum = new Text(App.getCoinView().getCoinImage().getLayoutX() + 32, App.getCoinView().getCoinImage().getLayoutY() + 20, Integer.toString(App.getCoin().getCurCoin()));
+        Text coinNum = new Text(App.getCoinView().getCoinImage().getLayoutX() + 32, App.getCoinView().getCoinImage().getLayoutY() + 20, Integer.toString(coin));
         coinNum.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
         coinNum.setFill(Color.WHITE);
         coinGroup.getChildren().addAll(coinNum, App.getCoinView().getCoinImage(), App.getCoinView().getCoinIncrease());
@@ -181,13 +188,12 @@ public class GameInfo {
         noCoinWall.getChildren().add(text);
     }
 
-    public void drawHourNum() {
+    public void drawHourNum(int hour) {
         hourGroup.getChildren().clear();
-        int hour = App.getHour().getCurrentHour();
         if (hour < 0) {
             hour = 0;
         }
-        Text hourNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 20, "Hour " + hour);
+        Text hourNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 30, "Hour " + hour);
         hourNum.setFont(Font.font("Calibri", FontWeight.BOLD, 19.5));
         hourNum.setFill(Color.WHITE);
         hourGroup.getChildren().add(hourNum);
@@ -198,7 +204,7 @@ public class GameInfo {
         double y;
         double maxHp;
         if (titan instanceof ArmouredTitan) {
-            x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX();
+            x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX()+10;
             y = titan.getArmouredTitanView().getView().getLayoutY() + titan.getArmouredTitanView().getView().getTranslateY();
             maxHp = 100.0;
         } else {
@@ -239,15 +245,53 @@ public class GameInfo {
                 text.setText("");
                 text.setTranslateY(0);
             });
-            setFadeTransition(text, 1500);
+            setFadeTransition(text, 1500, 1.0, 0);
             damageGroup.getChildren().add(text);
         });
     }
 
-    public void setFadeTransition(Node node, int duration) {
+    public void drawScore(int score) {
+        scoreGroup.getChildren().clear();
+        Text scoreNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 10, "Score " +score );
+        scoreNum.setFont(Font.font("Calibri", FontWeight.BOLD, 19.5));
+        scoreNum.setFill(Color.WHITE);
+        scoreGroup.getChildren().add(scoreNum);
+    }
+
+    public void drawHelpButton(){
+        ImageView imageView=new ImageView();
+        imageView.setImage(new Image(getClass().getResourceAsStream("images/gamerules/questMark.png")));
+        imageView.setLayoutX(1060);
+        imageView.setLayoutY(-220);
+        imageView.setScaleX(0.1);
+        imageView.setScaleY(0.1);
+        imageView.setOnMouseClicked(new EventHandler<>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (helpStage == null) {
+                    try {
+                        Parent instruction = FXMLLoader.load(this.getClass().getResource("Instruction.fxml"));
+                        helpStage = new Stage();
+                        helpStage.initStyle(StageStyle.UNDECORATED);
+                        helpStage.initOwner(App.getPrimaryStage());
+                        helpStage.setScene(new Scene(instruction));
+                        helpStage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    helpStage.close();
+                    helpStage = null;
+                }
+            }
+        });
+        gameInfo.getChildren().add(imageView);
+    }
+
+    public void setFadeTransition(Node node, int duration, double f, double t) {
         FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
-        ft.setFromValue(1.0);
-        ft.setToValue(0);
+        ft.setFromValue(f);
+        ft.setToValue(t);
         ft.play();
     }
 

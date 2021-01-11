@@ -2,11 +2,13 @@ package com.attackontitan;
 
 public class ColossusTitan extends Titan {
 
-    public ColossusTitan(int column) {
-        this.hp = 50;
+    public ColossusTitan(int column, int row) {
+    	this.hp = 50;
         this.attackPoint = 10;
+        this.currentColumn = column;
+        this.currentRow = row;
         this.colossusTitanView =new ColossusTitanView(column);
-    }
+	}
 
     @Override
     String getName() {
