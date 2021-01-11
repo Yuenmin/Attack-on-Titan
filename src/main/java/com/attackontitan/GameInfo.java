@@ -202,28 +202,34 @@ public class GameInfo {
     }
 
     public void drawTitanHp(int row, Titan titan, int healthPoint) {
-        double x;
-        double y;
-        double hPosition;
-        double tPosition;
-        double maxHp;
+        double x = 0;
+        double y = 0;
+        double hPosition = 0;
+        double tPosition = 0;
+        double maxHp = 0;
         if (titan instanceof ArmouredTitan) {
             x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX();
             y = titan.getArmouredTitanView().getView().getLayoutY() + titan.getArmouredTitanView().getView().getTranslateY();
             hPosition = x + 17;
-            tPosition = x + 25;
+            tPosition = x + 27;
             if (row == 0) {
                 y += 90;
             } else if (row == 1) {
                 y += 20;
             }
             maxHp = 100.0;
-        } else {
+        } else if (titan instanceof ColossusTitan) {
             x = titan.getColossusTitanView().getView().getLayoutX() + titan.getColossusTitanView().getView().getTranslateX();
             y = titan.getColossusTitanView().getView().getLayoutY() + titan.getColossusTitanView().getView().getTranslateY();
-            hPosition = x + 7;
+            hPosition = x + 9;
             tPosition = x + 20;
             maxHp = 50.0;
+        } else if (titan instanceof ArmouredAndColossusTitan) {
+            x = titan.getArmouredAndColossusTitanView().getView().getLayoutX() + titan.getArmouredAndColossusTitanView().getView().getTranslateX();
+            y = titan.getArmouredAndColossusTitanView().getView().getLayoutY() + titan.getArmouredAndColossusTitanView().getView().getTranslateY();
+            hPosition = x + 17;
+            tPosition = x + 27;
+            maxHp = 150.0;
         }
         if (healthPoint < 0) {
             healthPoint = 0;
@@ -238,14 +244,17 @@ public class GameInfo {
     public void titanDamage(Titan titan, int damage) {
         damageGroup.getChildren().clear();
         Platform.runLater(() -> {
-            double x;
-            double y;
+            double x = 0;
+            double y = 0;
             if (titan instanceof ArmouredTitan) {
                 x = titan.getArmouredTitanView().getView().getLayoutX();
                 y = titan.getArmouredTitanView().getView().getLayoutY();
-            } else {
+            } else if (titan instanceof ColossusTitan) {
                 x = titan.getColossusTitanView().getView().getLayoutX();
                 y = titan.getColossusTitanView().getView().getLayoutY();
+            } else if (titan instanceof ArmouredAndColossusTitan) {
+                x = titan.getArmouredAndColossusTitanView().getView().getLayoutX();
+                y = titan.getArmouredAndColossusTitanView().getView().getLayoutY();
             }
             Text text = new Text();
             text.setText("-" + damage);

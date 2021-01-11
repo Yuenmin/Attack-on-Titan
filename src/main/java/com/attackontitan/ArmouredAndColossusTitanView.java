@@ -21,7 +21,17 @@ public class ArmouredAndColossusTitanView {
     private List<Image> acTitanAttack;
     private ImageView acTitan;
 
-    public ArmouredAndColossusTitanView(double column) {
+    public ArmouredAndColossusTitanView(Titan titan1,Titan titan2,double column) {
+        if(titan1 instanceof ArmouredTitan){
+            titan1.getArmouredTitanView().getView().setVisible(false);
+        }else{
+            titan1.getColossusTitanView().getView().setVisible(false);
+        }
+        if(titan2 instanceof ArmouredTitan){
+            titan2.getArmouredTitanView().getView().setVisible(false);
+        }else{
+            titan2.getColossusTitanView().getView().setVisible(false);
+        }
         column /= 2;
         initImage();
         x = 105 + (column * 120);

@@ -248,8 +248,8 @@ public class ArmouredTitanView {
             @Override
             public void handle(long now) {
                 if (!isAnimating) {
-                    attackAni();
                     isAnimating = true;
+                    attackAni();
                     stop();
                 }
             }

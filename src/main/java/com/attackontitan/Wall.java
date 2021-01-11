@@ -47,6 +47,34 @@ public class Wall {
         System.out.println("    -- -- -- -- -- -- -- -- -- -- ");
     }
 
+    public boolean armouredTitanDestroy(int index) {
+    	if(wallUnits[index].getWeapon() != null) {
+    		wallUnits[index].getWeapon().destroy();
+			System.out.println(wallUnits[index].getWeapon());
+			return true;
+		}
+		else {
+			int[] weapons = new int[10];
+			for(int k = 0; k < 20; k+=2) {
+				if(wallUnits[index].getWeapon()!=null) {
+					weapons[k/2]=k;
+				}
+			}
+			if(weapons.length == 0) {
+				wallUnits[index].takeDamage(index);
+				return true;
+			}
+			return false;
+		}
+    }
+
+    public boolean weaponAvailable(int index) {
+    	return wallUnits[index].getWeapon() != null;
+    }
+    public void upgradeWeapon(int index) {
+    	wallUnits[index].getWeapon().upgrade();
+    }
+
     public WallUnit[] getWallUnits() {
         return wallUnits;
     }

@@ -88,13 +88,15 @@ public class App extends Application {
                     cannon.getCannonGroup(),
                     soldier.getSoldierGroup()
             );
-            soldier.show();
-            cannon.spawn(10);
-            setFadeTransition(columnNumber, 1000);
-            drawColumnNum();
-            setFadeTransition(column, 2000);
-            drawColumn();
-            startGame();
+            Platform.runLater(() -> {
+                soldier.show();
+                cannon.spawn(10);
+                setFadeTransition(columnNumber, 1000);
+                drawColumnNum();
+                setFadeTransition(column, 2000);
+                drawColumn();
+                startGame();
+            });
         });
     }
 
@@ -204,6 +206,9 @@ public class App extends Application {
                 gameInfo.drawHourNum(hour.getCurrentHour());
                 gameInfo.drawCoinNum(coin.getCurCoin());
                 gameInfo.drawScore(score);
+                ground.getATitanList().removeIf(titan -> !titan.getView().isVisible());
+                ground.getCTitanList().removeIf(titan -> !titan.getView().isVisible());
+                ground.getAcTitanList().removeIf(titan -> !titan.getView().isVisible());
             }
         }.start();
     }
@@ -225,6 +230,7 @@ public class App extends Application {
         Random r = new Random();
         score = 0;
         hour.setCurrentHour(4);
+        int c=0;
         while (hour.getCurrentHour() >= 0) {
             if (hour.isPlayerTurn()) {
                 // player turn
@@ -244,8 +250,6 @@ public class App extends Application {
                 //Titan's turn
                 delay(2500);
                 double chance = (hour.getCurrentHour() - 5) / 15.0;
-                //For testing only
-                chance = 1;
                 ArrayList<Integer> newTitan = new ArrayList<>();
                 if (chance < 1) {
                     if (r.nextInt(101) <= (int) (chance * 100)) {
@@ -268,11 +272,11 @@ public class App extends Application {
                 }
             }
             if (hour.getCurrentHour() >= 0) {
-                //delay(4000);
+                delay(4000);
                 hour.nextHour();
                 coinView.coinAni();
                 coin.increaseCoinPerHours();
-                //delay(1000);
+                delay(1000);
             }
         }
     }
@@ -292,12 +296,11 @@ public class App extends Application {
         int position;
         do {
             position = r.nextInt(max/2)*2;
-            if(r.nextInt(1) == 0){
+            if(r.nextInt(2) == 0){
                 ground.addArmouredTitan(position);
             }else{
                 ground.addColossusTitan(position);
             }
-
         } while (ground.getCTitanList().size() == size && ground.getATitanList().size() == size);
 
         return position;
@@ -342,8 +345,6 @@ public class App extends Application {
                     }
                 }
             }
-            ground.getATitanList().removeIf(titan -> !titan.getView().isVisible());
-            ground.getCTitanList().removeIf(titan -> !titan.getView().isVisible());
         });
     }
 
@@ -458,7 +459,7 @@ public class App extends Application {
             Weapon weapon = wallUnit.getWeapon();
             if (weapon.getLevel() > 0 && (curTitan instanceof ArmouredTitan || curTitan instanceof ArmouredAndColossusTitan)) {
                 // attack weapon
-                weapon.destroy();
+                wall.armouredTitanDestroy(curColumn/2);
                 cannon.spawn(curColumn/2);
                 cannon.changeColour(curColumn/2,0);
             } else {
