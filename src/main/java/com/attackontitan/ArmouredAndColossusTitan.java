@@ -5,6 +5,7 @@ public class ArmouredAndColossusTitan extends Titan {
     public ArmouredAndColossusTitan(Titan titan1, Titan titan2) {
         this.hp = titan1.hp + titan2.hp;
         this.attackPoint = titan1.attackPoint + titan2.attackPoint;
+        this.canMove = true;
         this.armouredAndColossusTitanView = new ArmouredAndColossusTitanView(titan1,titan2,titan2.currentColumn);
     }
 
