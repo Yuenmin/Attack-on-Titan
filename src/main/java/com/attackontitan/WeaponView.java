@@ -83,7 +83,6 @@ public class WeaponView {
         int x = 83;
         for (int j = 0; j < 10; j++) {
             boolean shoot = true;
-            System.out.println(hasTitan[j]);
             if (App.getWall().get(j).getWeapon().getLevel() == 0 || !hasTitan[j]) {
                 shoot = false;
             }
@@ -138,6 +137,8 @@ public class WeaponView {
             curCannon.setOpacity(1);
         } else if (level == 1) {
             curCannon.setOpacity(1);
+        }else{
+            curCannon.setOpacity(0.6);
         }
     }
 

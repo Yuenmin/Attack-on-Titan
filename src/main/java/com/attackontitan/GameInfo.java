@@ -22,6 +22,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+
 import javafx.scene.control.Tooltip;
 
 public class GameInfo {
@@ -200,24 +201,35 @@ public class GameInfo {
         hourGroup.getChildren().add(hourNum);
     }
 
-    public void drawTitanHp(Titan titan, int healthPoint) {
+    public void drawTitanHp(int row, Titan titan, int healthPoint) {
         double x;
         double y;
+        double hPosition;
+        double tPosition;
         double maxHp;
         if (titan instanceof ArmouredTitan) {
-            x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX()+10;
+            x = titan.getArmouredTitanView().getView().getLayoutX() + titan.getArmouredTitanView().getView().getTranslateX();
             y = titan.getArmouredTitanView().getView().getLayoutY() + titan.getArmouredTitanView().getView().getTranslateY();
+            hPosition = x + 17;
+            tPosition = x + 25;
+            if (row == 0) {
+                y += 90;
+            } else if (row == 1) {
+                y += 20;
+            }
             maxHp = 100.0;
         } else {
             x = titan.getColossusTitanView().getView().getLayoutX() + titan.getColossusTitanView().getView().getTranslateX();
             y = titan.getColossusTitanView().getView().getLayoutY() + titan.getColossusTitanView().getView().getTranslateY();
+            hPosition = x + 7;
+            tPosition = x + 20;
             maxHp = 50.0;
         }
         if (healthPoint < 0) {
             healthPoint = 0;
         }
-        HealthBar healthBar = new HealthBar(x + 7, y, healthPoint / maxHp);
-        Text hp = new Text(x + 20, y - 2, Integer.toString(healthPoint));
+        HealthBar healthBar = new HealthBar(hPosition, y, healthPoint / maxHp);
+        Text hp = new Text(tPosition, y - 2, Integer.toString(healthPoint));
         hp.setFont(Font.font("Calibri", FontWeight.SEMI_BOLD, 15));
         hp.setFill(Color.WHITE);
         titanHealthBar.getChildren().addAll(healthBar.getHealthBar(), hp);
@@ -253,14 +265,14 @@ public class GameInfo {
 
     public void drawScore(int score) {
         scoreGroup.getChildren().clear();
-        Text scoreNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 10, "Score " +score );
+        Text scoreNum = new Text(App.getCoinView().getCoinImage().getLayoutX(), App.getCoinView().getCoinImage().getLayoutY() - 10, "Score " + score);
         scoreNum.setFont(Font.font("Calibri", FontWeight.BOLD, 19.5));
         scoreNum.setFill(Color.WHITE);
         scoreGroup.getChildren().add(scoreNum);
     }
 
-    public void drawHelpButton(){
-        ImageView imageView=new ImageView();
+    public void drawHelpButton() {
+        ImageView imageView = new ImageView();
         imageView.setImage(new Image(getClass().getResourceAsStream("images/gamerules/questMark.png")));
         imageView.setLayoutX(1060);
         imageView.setLayoutY(-220);

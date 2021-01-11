@@ -9,7 +9,8 @@ public abstract class Titan {
 
     protected ColossusTitanView colossusTitanView;
     protected ArmouredTitanView armouredTitanView;
-    
+    protected ArmouredAndColossusTitanView armouredAndColossusTitanView;
+
     protected boolean canMove;
 
     public int getCurrentRow() {
@@ -45,6 +46,10 @@ public abstract class Titan {
 
     public ArmouredTitanView getArmouredTitanView() {
         return armouredTitanView;
+    }
+
+    public ArmouredAndColossusTitanView getArmouredAndColossusTitanView() {
+        return armouredAndColossusTitanView;
     }
 
     //    void move() {

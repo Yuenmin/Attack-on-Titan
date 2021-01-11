@@ -24,6 +24,7 @@ public class ArmouredTitanView {
     private boolean isAnimating;
 
     public ArmouredTitanView(double column) {
+        column /= 2;
         initImage();
         x = 95 + (column * 120);
         y = -65;
@@ -89,7 +90,7 @@ public class ArmouredTitanView {
         });
     }
 
-    private void leftAni() {
+    private void leftAni(int n) {
         translateTransition = new TranslateTransition();
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
@@ -110,10 +111,12 @@ public class ArmouredTitanView {
         translateTransition.setByX(-120);
         translateTransition.setDuration(Duration.millis(2700));
         translateTransition.play();
-        translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
+        if(n==1){
+            translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
+        }
     }
 
-    private void rightAni() {
+    private void rightAni(int n) {
         translateTransition = new TranslateTransition();
         Timeline timeline = new Timeline();
         timeline.setCycleCount(1);
@@ -134,12 +137,14 @@ public class ArmouredTitanView {
         translateTransition.setByX(120);
         translateTransition.setDuration(Duration.millis(2700));
         translateTransition.play();
-        translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
+        if(n==1) {
+            translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
+        }
     }
 
     private void attackAni() {
         Timeline timeline = new Timeline();
-        timeline.setCycleCount(2);
+        timeline.setCycleCount(1);
         aTitan.setLayoutX(x);
         aTitan.setLayoutY(y);
         KeyFrame kf1 = new KeyFrame(Duration.millis(300), t -> aTitan.setImage(aTitanAttack.get(0)));
@@ -186,12 +191,38 @@ public class ArmouredTitanView {
         }.start();
     }
 
+    public void leftAndWalk() {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (!isAnimating) {
+                    leftAni(1);
+                    isAnimating = true;
+                    stop();
+                }
+            }
+        }.start();
+    }
+
     public void left() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if (!isAnimating) {
-                    leftAni();
+                    leftAni(0);
+                    isAnimating = true;
+                    stop();
+                }
+            }
+        }.start();
+    }
+
+    public void rightAndWalk() {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (!isAnimating) {
+                    rightAni(1);
                     isAnimating = true;
                     stop();
                 }
@@ -204,7 +235,7 @@ public class ArmouredTitanView {
             @Override
             public void handle(long now) {
                 if (!isAnimating) {
-                    rightAni();
+                    rightAni(0);
                     isAnimating = true;
                     stop();
                 }

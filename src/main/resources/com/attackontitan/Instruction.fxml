@@ -8,22 +8,21 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="449.0" prefWidth="749.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="com.attackontitan.Controller">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="538.0" prefWidth="812.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.attackontitan.Controller">
    <children>
-      <ImageView fitHeight="449.0" fitWidth="749.0">
+      <ImageView fitHeight="538.0" fitWidth="812.0">
          <image>
             <Image url="@images/gamerules/instructionBG.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="378.0" fitWidth="643.0" layoutX="46.0" layoutY="44.0">
+      <ImageView fitHeight="509.0" fitWidth="755.0" layoutX="24.0" layoutY="12.0">
          <image>
             <Image url="@images/gamerules/instructionBoard.png" />
          </image>
       </ImageView>
-      <Label layoutX="101.0" layoutY="89.0" prefHeight="286.0" prefWidth="557.0" text="GAME INSTRUCTIONS&#10;1.  The game will start on Hour 0.&#10;2.  For each hour, the enemy and the player takes turns.&#10;3.  Player starts with 50 coins and gain 5 coins for each hour.&#10;4.  Player will be given options to upgrade walls and weapons every 2 hours.&#10;5.  If the coins are not enough to upgrade all weapons and walls selected, the system will try&#10;     to upgrade as many as possible.&#10;6.  Armoured titan (BLUE) &amp; Colossus titan (YELLOW) will start to spawn on Hour 5.&#10;7.  Armoured titans have 100HP &amp; 5 ATTACK. They only spawn at Row 0. (Furthest from player)&#10;8.  Colossus titans have 50HP &amp; 10 ATTACK. They only spawn at Row 9. (Closest to player)&#10;9.  Both titans may move left or right whenever possible.&#10;10. Armoured titans move 1 unit closer to the wall every hour and will attack closest weapon &#10;     before attacking the wall. If attacking wall, it will stop moving. &#10;11. Colossus titans only attack wall. &#10;">
+      <Label layoutX="89.0" layoutY="72.0" prefHeight="390.0" prefWidth="638.0" text="GAME INSTRUCTIONS&#10;1.  The game will start on Hour 0.&#10;2.  For each hour, the enemy and the player takes turns.&#10;3.  Player starts with 50 coins and gain 5 coins for each hour.&#10;4.  Player will be given options to upgrade walls and weapons every 2 hours.&#10;5.  If the coins are not enough to upgrade all weapons and walls selected, the system will try to upgrade &#10;     as many as possible.&#10;6.  Armoured titan (BLUE) &amp; Colossus titan (YELLOW) will start to spawn on Hour 5.&#10;7.  Armoured titans have 100HP &amp; 5 ATTACK. They only spawn at Row 0. (Furthest from player)&#10;8.  Colossus titans have 50HP &amp; 10 ATTACK. They only spawn at Row 9. (Closest to player)&#10;9.  Both titans may move left or right whenever possible.&#10;10. Armoured titans move 1 unit closer to the wall every hour and will attack closest weapon before attacking&#10;      the wall. If attacking wall, it will stop moving. &#10;11. Colossus titans only attack wall. &#10;12. Weapons have 3 upgradable levels : Level 1(Silver), Level 2(Green), Level 3(Red)&#10;13. Weapons have similar upgrade cost and damage point:&#10;      Level 1 (2 coins and 2 damage point)&#10;      Level 2 (5 coins and 5 damage point)&#10;      Level 3 (10 coins and 10 damage point)&#10;14. You will LOSE if one of the walls' HP falls to 0.">
          <textFill>
-            <LinearGradient endX="0.4274809160305343" endY="0.7175572664683101">
+            <LinearGradient endX="0.4274809160305343" endY="1.0" startY="0.20992366412213742">
                <stops>
                   <Stop color="#da2424" />
                   <Stop color="WHITE" offset="1.0" />

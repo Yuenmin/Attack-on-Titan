@@ -184,6 +184,9 @@ public class App extends Application {
                 for (ColossusTitanView titan : ground.getCTitanList()) {
                     pane.getChildren().addAll(titan.getView());
                 }
+                for(ArmouredAndColossusTitanView titan: ground.getAcTitanList()){
+                    pane.getChildren().addAll(titan.getView());
+                }
                 //display level of weapon
                 for (int i = 0; i < 10; i++) {
                     cannon.showLevel(wall.get(i).getWeapon().getLevel(), i);
@@ -194,7 +197,7 @@ public class App extends Application {
                         Titan[][] titans = ground.getTitans();
                         Titan curTitan = titans[i][j];
                         if (curTitan != null) {
-                            gameInfo.drawTitanHp(curTitan, curTitan.hp);
+                            gameInfo.drawTitanHp(i,curTitan, curTitan.hp);
                         }
                     }
                 }
@@ -239,6 +242,7 @@ public class App extends Application {
 
             } else if (hour.getCurrentHour() >= 5) {
                 //Titan's turn
+                delay(2500);
                 double chance = (hour.getCurrentHour() - 5) / 15.0;
                 //For testing only
                 chance = 1;
@@ -253,7 +257,6 @@ public class App extends Application {
                     }
                 }
                 ground.move(newTitan);
-                //titanMoveOrAttack(newTitan);
             }
             // check if wall is destroyed
             for (WallUnit wallUnit : wall.getWallUnits()) {
@@ -320,10 +323,17 @@ public class App extends Application {
                                     titans[row][column].armouredTitanView.getView().setVisible(false);
                                     titans[row][column] = null;
                                 });
-                            } else {
+                            } else if(titans[i][j] instanceof ColossusTitan){
                                 ft.setNode(titans[i][j].colossusTitanView.getView());
                                 ft.setOnFinished(actionEvent -> {
                                     titans[row][column].colossusTitanView.getView().setVisible(false);
+                                    titans[row][column] = null;
+                                });
+                            }
+                            else if(titans[i][j] instanceof ArmouredAndColossusTitan){
+                                ft.setNode(titans[i][j].armouredAndColossusTitanView.getView());
+                                ft.setOnFinished(actionEvent -> {
+                                    titans[row][column].armouredAndColossusTitanView.getView().setVisible(false);
                                     titans[row][column] = null;
                                 });
                             }
@@ -439,15 +449,18 @@ public class App extends Application {
         if (curRow == 9) {
             if (curTitan instanceof ArmouredTitan) {
                 curTitan.getArmouredTitanView().attack();
-            } else {
+            } else if(curTitan instanceof ColossusTitan){
                 curTitan.getColossusTitanView().attack();
+            } else if(curTitan instanceof ArmouredAndColossusTitan){
+                curTitan.getArmouredAndColossusTitanView().attack();
             }
             WallUnit wallUnit = wall.get(curColumn/2);
             Weapon weapon = wallUnit.getWeapon();
-            if (weapon.getLevel() > 0 && curTitan instanceof ArmouredTitan) {
+            if (weapon.getLevel() > 0 && (curTitan instanceof ArmouredTitan || curTitan instanceof ArmouredAndColossusTitan)) {
                 // attack weapon
                 weapon.destroy();
                 cannon.spawn(curColumn/2);
+                cannon.changeColour(curColumn/2,0);
             } else {
                 // attack wall
                 wallUnit.takeDamage(titans[9][curColumn].getAttackPoint());
