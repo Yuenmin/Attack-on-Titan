@@ -4,7 +4,7 @@ public class Coin {
     private int curCoin;
 
     public Coin() {
-        curCoin = 70;
+        curCoin = 50;
     }
 
     public int getCurCoin() {

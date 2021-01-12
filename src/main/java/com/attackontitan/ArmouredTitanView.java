@@ -111,8 +111,10 @@ public class ArmouredTitanView {
         translateTransition.setByX(-120);
         translateTransition.setDuration(Duration.millis(2700));
         translateTransition.play();
-        if(n==1){
+        if (n == 1) {
             translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
+        } else {
+            translateTransition.setOnFinished(actionEvent -> isAnimating = false);
         }
     }
 
@@ -137,8 +139,10 @@ public class ArmouredTitanView {
         translateTransition.setByX(120);
         translateTransition.setDuration(Duration.millis(2700));
         translateTransition.play();
-        if(n==1) {
+        if (n == 1) {
             translateTransition.setOnFinished(actionEvent -> walkAfterMove('s'));
+        } else {
+            translateTransition.setOnFinished(actionEvent -> isAnimating = false);
         }
     }
 
