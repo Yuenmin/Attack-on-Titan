@@ -20,11 +20,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 public class App extends Application {
@@ -128,7 +128,7 @@ public class App extends Application {
                     gameInfo.drawInfoPane();
                     group.getChildren().add(gameInfo.getGameInfo());
                     upgradeStage = new Stage();
-                    //UPGRADEStage.initStyle(StageStyle.TRANSPARENT);
+                    upgradeStage.initStyle(StageStyle.TRANSPARENT);
                     upgradeStage.initOwner(pStage);
                     update();
                     new Thread(App.this::game).start();
@@ -249,7 +249,7 @@ public class App extends Application {
             } else if (hour.getCurrentHour() >= 5) {
                 //Titan's turn
                 delay(2500);
-                double chance = (hour.getCurrentHour() - 5) / 15.0;
+                double chance = hour.getCurrentHour() / 15.0;
                 ArrayList<Integer> newTitan = new ArrayList<>();
                 if (chance < 1) {
                     if (r.nextInt(101) <= (int) (chance * 100)) {
@@ -379,7 +379,7 @@ public class App extends Application {
     private static void upgradeWeapon(Weapon weapon) {
         int upgradeCost = weapon.getUpgradeCost();
         if (upgradeCost > coin.getCurCoin()) {
-            System.out.println("Not enough money!Weapon");
+            System.out.println("Not enough money!");
             Platform.runLater(gameInfo::drawNotEnoughCoinWeapon);
         } else {
             weapon.upgrade();
@@ -457,11 +457,9 @@ public class App extends Application {
             }
             WallUnit wallUnit = wall.get(curColumn/2);
             Weapon weapon = wallUnit.getWeapon();
-            if (weapon.getLevel() > 0 && (curTitan instanceof ArmouredTitan || curTitan instanceof ArmouredAndColossusTitan)) {
+            if (curTitan instanceof ArmouredTitan || curTitan instanceof ArmouredAndColossusTitan) {
                 // attack weapon
                 wall.armouredTitanDestroy(curColumn/2);
-                cannon.spawn(curColumn/2);
-                cannon.changeColour(curColumn/2,0);
             } else {
                 // attack wall
                 wallUnit.takeDamage(titans[9][curColumn].getAttackPoint());
@@ -476,6 +474,10 @@ public class App extends Application {
         ft.setToValue(1.0);
         ft.play();
         return ft;
+    }
+
+    public static WeaponView getCannon() {
+        return cannon;
     }
 
     public static ScoreBoard getScoreBoard() {

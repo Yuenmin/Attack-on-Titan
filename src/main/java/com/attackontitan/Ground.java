@@ -8,7 +8,6 @@ import java.util.Random;
 public class Ground {
     private Titan[][] titans;
     private String[][] ground = new String[10][20];
-    private static final Wall wall = new Wall();
     private List<ArmouredTitanView> aTitanList = new ArrayList<>();
     private List<ColossusTitanView> cTitanList = new ArrayList<>();
     private List<ArmouredAndColossusTitanView> acTitanList = new ArrayList<>();
@@ -65,7 +64,7 @@ public class Ground {
         } else if (curTitan instanceof ArmouredTitan) {
             titans[9][column] = new ArmouredAndColossusTitan((ArmouredTitan) curTitan, (ColossusTitan) colossusTitan);
             acTitanList.add(0, titans[9][column].getArmouredAndColossusTitanView());
-        } else if (curTitan instanceof ColossusTitan) {
+        } else if (curTitan instanceof ColossusTitan || curTitan instanceof ArmouredAndColossusTitan) {
             colossusTitan = null;
         }
         if (colossusTitan != null) {
@@ -99,7 +98,7 @@ public class Ground {
             for (int j = 0; j < 20; j++) {
                 Titan curTitan = titans[i][j];
                 if (curTitan != null && curTitan.canMove) {
-                    //System.out.println(curTitan.getName());
+                    System.out.println(curTitan.getName());
                     curRow = curTitan.currentRow;
                     curColumn = curTitan.currentColumn;
                     System.out.println(curTitan.currentRow);

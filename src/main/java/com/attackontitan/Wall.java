@@ -50,6 +50,8 @@ public class Wall {
     public boolean armouredTitanDestroy(int index) {
     	if(wallUnits[index].getWeapon() != null) {
     		wallUnits[index].getWeapon().destroy();
+            App.getCannon().spawn(index);
+            App.getCannon().changeColour(index,0);
 			System.out.println(wallUnits[index].getWeapon());
 			return true;
 		}
