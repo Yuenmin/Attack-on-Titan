@@ -29,7 +29,7 @@ public class Wall {
 
     public void printToConsole() {
         for (int level = 3; level > 0; level--) {
-        	System.out.print("    ");
+            System.out.print("    ");
             for (int i = 0; i < 10; i++) {
                 if (wallUnits[i].getWeapon().getLevel() >= level) {
                     System.out.print("** ");
@@ -48,33 +48,39 @@ public class Wall {
     }
 
     public boolean armouredTitanDestroy(int index) {
-    	if(wallUnits[index].getWeapon() != null) {
-    		wallUnits[index].getWeapon().destroy();
-            App.getCannon().spawn(index);
-            App.getCannon().changeColour(index,0);
-			System.out.println(wallUnits[index].getWeapon());
-			return true;
-		}
-		else {
-			int[] weapons = new int[10];
-			for(int k = 0; k < 20; k+=2) {
-				if(wallUnits[index].getWeapon()!=null) {
-					weapons[k/2]=k;
-				}
-			}
-			if(weapons.length == 0) {
-				wallUnits[index].takeDamage(index);
-				return true;
-			}
-			return false;
-		}
+        index /=2;
+        if (wallUnits[index].getWeapon().getLevel() > 0) {
+            wallUnits[index].getWeapon().destroy();
+            System.out.println(wallUnits[index].getWeapon());
+            return true;
+        } else {
+            boolean[] weapons = new boolean[10];
+            boolean stillHave = false;
+            for(int i=0;i<10;i++){
+                if (wallUnits[i].getWeapon().getLevel() > 0) {
+                    weapons[i] = true;
+                }
+            }
+            for (int i = 0; i < 10; i++) {
+                if (weapons[i]) {
+                    stillHave = true;
+                    break;
+                }
+            }
+            if (!stillHave) {
+                wallUnits[index].takeDamage(index);
+                return true;
+            }
+            return false;
+        }
     }
 
     public boolean weaponAvailable(int index) {
-    	return wallUnits[index].getWeapon() != null;
+        return wallUnits[index].getWeapon() != null;
     }
+
     public void upgradeWeapon(int index) {
-    	wallUnits[index].getWeapon().upgrade();
+        wallUnits[index].getWeapon().upgrade();
     }
 
     public WallUnit[] getWallUnits() {
