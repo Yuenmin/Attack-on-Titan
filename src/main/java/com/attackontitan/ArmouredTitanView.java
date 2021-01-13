@@ -253,6 +253,7 @@ public class ArmouredTitanView {
             public void handle(long now) {
                 if (!isAnimating) {
                     isAnimating = true;
+                    System.out.println("hi");
                     attackAni();
                     stop();
                 }
