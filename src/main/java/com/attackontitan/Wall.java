@@ -48,15 +48,16 @@ public class Wall {
     }
 
     public boolean armouredTitanDestroy(int index) {
-        index /=2;
+        index /= 2;
         if (wallUnits[index].getWeapon().getLevel() > 0) {
             wallUnits[index].getWeapon().destroy();
-            System.out.println(wallUnits[index].getWeapon());
+            App.getCannon().spawn(index / 2);
+            App.getCannon().changeColour(index / 2, 0);
             return true;
         } else {
             boolean[] weapons = new boolean[10];
             boolean stillHave = false;
-            for(int i=0;i<10;i++){
+            for (int i = 0; i < 10; i++) {
                 if (wallUnits[i].getWeapon().getLevel() > 0) {
                     weapons[i] = true;
                 }
@@ -68,7 +69,9 @@ public class Wall {
                 }
             }
             if (!stillHave) {
-                wallUnits[index].takeDamage(index);
+                Titan[][] titans = App.getGround().getTitans();
+                wallUnits[index].takeDamage(titans[9][index * 2].getAttackPoint());
+                App.getGameInfo().wallDamage(index, titans[9][index * 2].getAttackPoint());
                 return true;
             }
             return false;

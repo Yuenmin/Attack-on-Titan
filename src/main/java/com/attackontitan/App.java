@@ -127,7 +127,7 @@ public class App extends Application {
                     gameInfo.drawInfoPane();
                     group.getChildren().add(gameInfo.getGameInfo());
                     upgradeStage = new Stage();
-                    upgradeStage.initStyle(StageStyle.TRANSPARENT);
+                    //upgradeStage.initStyle(StageStyle.TRANSPARENT);
                     upgradeStage.initOwner(pStage);
                     update();
                     new Thread(App.this::game).start();
@@ -267,7 +267,7 @@ public class App extends Application {
                 }
             }
             if (hour.getCurrentHour() >= 0) {
-                delay(4000);
+                //delay(4000);
                 hour.nextHour();
                 coinView.coinAni();
                 coin.increaseCoinPerHours();
@@ -291,7 +291,7 @@ public class App extends Application {
         int position;
         do {
             position = r.nextInt(max / 2) * 2;
-            if (r.nextInt(2) == 0) {
+            if (r.nextInt(1) == 0) {
                 ground.addArmouredTitan(position);
             } else {
                 ground.addColossusTitan(position);
@@ -447,14 +447,6 @@ public class App extends Application {
             }
             WallUnit wallUnit = wall.get(curColumn / 2);
             Weapon weapon = wallUnit.getWeapon();
-            if (curTitan instanceof ArmouredTitan) {
-                boolean attack = wall.armouredTitanDestroy(curColumn);
-                if (attack) {
-                    curTitan.getArmouredTitanView().attack();
-                    cannon.spawn(curColumn / 2);
-                    cannon.changeColour(curColumn / 2, 0);
-                }
-            }
             if (curTitan instanceof ArmouredAndColossusTitan && weapon.getLevel() > 0) {
                 weapon.destroy();
                 cannon.spawn(curColumn / 2);
@@ -482,6 +474,14 @@ public class App extends Application {
 
     public static Stage getUpgradeStage() {
         return upgradeStage;
+    }
+
+    public static WeaponView getCannon() {
+        return cannon;
+    }
+
+    public static GameInfo getGameInfo() {
+        return gameInfo;
     }
 
     public static CoinView getCoinView() {
