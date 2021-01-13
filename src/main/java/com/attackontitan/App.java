@@ -127,7 +127,7 @@ public class App extends Application {
                     gameInfo.drawInfoPane();
                     group.getChildren().add(gameInfo.getGameInfo());
                     upgradeStage = new Stage();
-                    //upgradeStage.initStyle(StageStyle.TRANSPARENT);
+                    upgradeStage.initStyle(StageStyle.TRANSPARENT);
                     upgradeStage.initOwner(pStage);
                     update();
                     new Thread(App.this::game).start();
@@ -267,7 +267,7 @@ public class App extends Application {
                 }
             }
             if (hour.getCurrentHour() >= 0) {
-                //delay(4000);
+                delay(4000);
                 hour.nextHour();
                 coinView.coinAni();
                 coin.increaseCoinPerHours();
@@ -291,7 +291,7 @@ public class App extends Application {
         int position;
         do {
             position = r.nextInt(max / 2) * 2;
-            if (r.nextInt(1) == 0) {
+            if (r.nextInt(2) == 0) {
                 ground.addArmouredTitan(position);
             } else {
                 ground.addColossusTitan(position);
