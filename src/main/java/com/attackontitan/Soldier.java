@@ -31,12 +31,12 @@ public class Soldier{
     public Soldier() {
         soldierGroup.getChildren().addAll(soldier0,soldier1, soldier2, soldier3, soldier4, soldier5, soldier6, soldier7, soldier8, soldier9);
         soldierImage = new ArrayList<>();
-        soldierImage.add(new Image("com/attackontitan/sback1.png"));
-        soldierImage.add(new Image("com/attackontitan/sback2.png"));
-        soldierImage.add(new Image("com/attackontitan/sback3.png"));
-        soldierImage.add(new Image("com/attackontitan/sright1.png"));
-        soldierImage.add(new Image("com/attackontitan/sright2.png"));
-        soldierImage.add(new Image("com/attackontitan/sright3.png"));
+        soldierImage.add(new Image(getClass().getResourceAsStream("images/soldier/sback1.png")));
+        soldierImage.add(new Image(getClass().getResourceAsStream("images/soldier/sback2.png")));
+        soldierImage.add(new Image(getClass().getResourceAsStream("images/soldier/sback3.png")));
+        soldierImage.add(new Image(getClass().getResourceAsStream("images/soldier/sright1.png")));
+        soldierImage.add(new Image(getClass().getResourceAsStream("images/soldier/sright2.png")));
+        soldierImage.add(new Image(getClass().getResourceAsStream("images/soldier/sright3.png")));
         isAnimating =true;
         y=800;
     }
